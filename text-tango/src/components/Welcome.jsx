@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import welcomeImg from "./../assets/welcome-img.png";
 import Login from "./Login";
+import Register from "./Register";
 
 export default function Welcome() {
+  let [toggle, setToggle] = useState("login");
+  console.log(toggle);
+
+  // value of toggle will never become null
+  if (!toggle) setToggle("register");
+
   return (
     <Wrapper>
       <div className="Welcome">
@@ -11,7 +18,12 @@ export default function Welcome() {
           <img src={welcomeImg} alt="welcome-image" />
         </div>
         <div className="auth">
-          <Login />
+          {toggle === "login" && (
+            <Login toggle={toggle} setToggle={setToggle} />
+          )}
+          {toggle === "register" && (
+            <Register toggle={toggle} setToggle={setToggle} />
+          )}
         </div>
       </div>
     </Wrapper>
