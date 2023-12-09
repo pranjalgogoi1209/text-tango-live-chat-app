@@ -1,26 +1,29 @@
 import React from "react";
 import styled from "styled-components";
-import Authentication from "./Authentication";
+import ToggleBtn from "./ToggleBtn";
+import { Stack, Button } from "@mui/material";
 
-export default function Register({ toggle, setToggle }) {
+export default function Login({ toggle, setToggle }) {
   return (
     <Wrapper>
-      <div className="Register">
+      <div className="Login">
         <header>
-          <h1>Register</h1>
-          <p>Please register to continue</p>
+          <h1>LogIn</h1>
+          <p>Please login to continue</p>
         </header>
-
         <form>
-          <div className="name">
-            <input type="name" placeholder="Enter first-name" />
-            <input type="name" placeholder="Enter last-name" />
-          </div>
           <input type="email" placeholder="Enter your email" />
-          <input type="password" placeholder="Enter new password" />
+          <input type="password" placeholder="Enter your password" />
+          <Stack direction="row">
+            <Button variant="outlined" size="small">
+              Submit
+            </Button>
+          </Stack>
         </form>
-
-        <Authentication toggle={toggle} setToggle={setToggle} />
+        <div>
+          <p>Forget Password ?</p>
+        </div>
+        <ToggleBtn toggle={toggle} setToggle={setToggle} />
       </div>
     </Wrapper>
   );
@@ -28,7 +31,7 @@ export default function Register({ toggle, setToggle }) {
 
 const Wrapper = styled.div`
   height: 100%;
-  .Register {
+  .Login {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -46,13 +49,6 @@ const Wrapper = styled.div`
       display: flex;
       flex-direction: column;
       gap: 2vw;
-      .name {
-        display: flex;
-        gap: 2vw;
-        input {
-          width: 50%;
-        }
-      }
       input {
         padding: 0.5vw;
         height: 3vw;
