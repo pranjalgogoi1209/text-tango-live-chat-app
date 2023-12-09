@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ToggleBtn from "./ToggleBtn";
-import { Stack, Button } from "@mui/material";
+import { Stack, Button, TextField } from "@mui/material";
 
 export default function Login({ toggle, setToggle }) {
+  const [numberValue, setNumberValue] = useState("");
+  const [passValue, setPassValue] = useState("");
+
   return (
     <Wrapper>
       <div className="Login">
@@ -11,18 +14,45 @@ export default function Login({ toggle, setToggle }) {
           <h1>LogIn</h1>
           <p>Please login to continue</p>
         </header>
+
         <form>
-          <input type="email" placeholder="Enter your email" />
-          <input type="password" placeholder="Enter your password" />
+          <TextField
+            InputLabelProps={{ className: "password_field" }}
+            sx={{
+              "& .MuiInputBase-root": {
+                height: "3vw",
+              },
+            }}
+            type="number"
+            label="Phone"
+            size="small"
+            required
+            error={!numberValue}
+            onChange={e => setNumberValue(e.target.value)}
+          />
+          <TextField
+            InputLabelProps={{ className: "password_field" }}
+            sx={{
+              "& .MuiInputBase-root": {
+                height: "3vw",
+              },
+            }}
+            type="password"
+            label="Password"
+            size="small"
+            required
+            error={!passValue}
+            onChange={e => setPassValue(e.target.value)}
+          />
           <Stack direction="row">
-            <Button variant="outlined" size="small">
-              Submit
-            </Button>
+            <Button variant="outlined">Submit</Button>
           </Stack>
         </form>
+
         <div>
           <p>Forget Password ?</p>
         </div>
+
         <ToggleBtn toggle={toggle} setToggle={setToggle} />
       </div>
     </Wrapper>
@@ -49,9 +79,8 @@ const Wrapper = styled.div`
       display: flex;
       flex-direction: column;
       gap: 2vw;
-      input {
-        padding: 0.5vw;
-        height: 3vw;
+      .password_field {
+        font-size: 1.1vw;
       }
     }
   }
