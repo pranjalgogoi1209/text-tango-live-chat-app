@@ -38,7 +38,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 4vw 2vw 4vw 2vw;
+    padding: 3vw 2vw 3vw 2vw;
     * {
       color: #020c68;
     }
@@ -50,7 +50,7 @@ const Wrapper = styled.div`
     form {
       display: flex;
       flex-direction: column;
-      gap: 1vw;
+      gap: 1.3vw;
       .name {
         display: flex;
         gap: 2vw;

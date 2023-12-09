@@ -36,7 +36,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 4vw 2vw 4vw 2vw;
+    padding: 3vw 2vw 3vw 2vw;
     * {
       color: #020c68;
     }
