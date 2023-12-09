@@ -45,7 +45,9 @@ export default function Login({ toggle, setToggle }) {
             onChange={e => setPassValue(e.target.value)}
           />
           <Stack direction="row">
-            <Button variant="outlined">Submit</Button>
+            <Button variant="outlined" size="small">
+              Submit
+            </Button>
           </Stack>
         </form>
 
