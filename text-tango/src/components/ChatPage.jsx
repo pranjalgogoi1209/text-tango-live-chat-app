@@ -21,15 +21,17 @@ export default function ChatPage() {
 const Wrapper = styled.div`
   .ChatPage {
     height: 100vh;
+    width: 100vw;
     display: flex;
-    border: 2px solid red;
     .ChatSidebar {
       width: 35%;
-      border: 2px solid black;
+      border-radius: 0 1vw 1vw 0;
+      /* border: 2px solid black; */
     }
     .ChatContainer {
-      width: 65%;
-      border: 2px solid black;
+      width: 100%;
+      border-radius: 1vw 0 0 1vw;
+      /* border: 2px solid black; */
     }
   }
 `;

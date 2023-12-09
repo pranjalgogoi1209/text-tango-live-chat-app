@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
+import User from "./User";
 
 export default function ChatSidebar() {
   return (
@@ -33,7 +34,11 @@ export default function ChatSidebar() {
         </div>
 
         {/* users */}
-        <div className="users">user1</div>
+        <div className="users">
+          <User />
+          <User />
+          <User />
+        </div>
       </div>
     </Wrapper>
   );
@@ -60,6 +65,7 @@ const Wrapper = styled.div`
         }
       }
     }
+
     .search-bar {
       display: flex;
       gap: 1vw;
@@ -79,6 +85,12 @@ const Wrapper = styled.div`
       ::placeholder {
         color: #fff;
       }
+    }
+
+    .users {
+      display: flex;
+      flex-direction: column;
+      gap: 2vw;
     }
   }
 `;
