@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import welcomeImg from "./../assets/welcome-img.png";
+import welcomeImg from "./../../assets/welcome-img.png";
 import Login from "./Login";
 import Register from "./Register";
 
-export default function Welcome() {
+export default function WelcomePage() {
   let [toggle, setToggle] = useState("login");
   console.log(toggle);
 
