@@ -2,19 +2,59 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ToggleBtn from "./ToggleBtn";
 import { Stack, Button, TextField } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register({ toggle, setToggle }) {
-  // form data : values
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    password: "",
+    newPassword: "",
+    confirmPassword: "",
   });
+
+  // IMPORTING DATA FROM FORM
   const handleChange = e => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  console.log(values);
+
+  // VALIDATION TOASTIFY
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 4000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "light",
+  };
+  const handleValidation = () => {
+    if (values.newPassword.length < 8) {
+      toast.error(
+        "password length should be equal to or more than 8 characters",
+        toastOptions
+      );
+      return false;
+    } else if (values.newPassword !== values.confirmPassword) {
+      toast.error(
+        "new-password and confirm-password should be same",
+        toastOptions
+      );
+      return false;
+    }
+    return true;
+  };
+
+  // FORM SUBMISSION
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (handleValidation()) {
+      toast.success("Registered Successfully", toastOptions);
+      setTimeout(() => {
+        setToggle("login");
+      }, 5000);
+      console.log(values);
+    }
+  };
 
   return (
     <Wrapper>
@@ -24,7 +64,7 @@ export default function Register({ toggle, setToggle }) {
           <p>Please register to continue</p>
         </header>
 
-        <form>
+        <form onSubmit={e => handleSubmit(e)}>
           <div className="name">
             <TextField
               InputLabelProps={{ className: "text_field" }}
@@ -75,31 +115,51 @@ export default function Register({ toggle, setToggle }) {
             onChange={e => handleChange(e)}
           />
 
-          <TextField
-            InputLabelProps={{ className: "text_field" }}
-            sx={{
-              "& .MuiInputBase-root": {
-                height: "3vw",
-                fontSize: "1.1vw",
-              },
-            }}
-            type="password"
-            name="password"
-            label="New-Password"
-            size="small"
-            required
-            error={!values.password}
-            onChange={e => handleChange(e)}
-          />
+          <div className="password">
+            <TextField
+              InputLabelProps={{ className: "text_field" }}
+              sx={{
+                "& .MuiInputBase-root": {
+                  height: "3vw",
+                  fontSize: "1.1vw",
+                },
+              }}
+              type="password"
+              name="newPassword"
+              label="New-Password"
+              size="small"
+              required
+              error={!values.newPassword}
+              onChange={e => handleChange(e)}
+            />
+            <TextField
+              InputLabelProps={{ className: "text_field" }}
+              sx={{
+                "& .MuiInputBase-root": {
+                  height: "3vw",
+                  fontSize: "1.1vw",
+                },
+              }}
+              type="password"
+              name="confirmPassword"
+              label="Confirm-Password"
+              size="small"
+              required
+              error={!values.confirmPassword}
+              onChange={e => handleChange(e)}
+            />
+          </div>
 
           <Stack direction="row">
-            <Button variant="outlined" size="small">
+            <Button type="submit" variant="outlined" size="small">
               Submit
             </Button>
           </Stack>
         </form>
+
         <ToggleBtn toggle={toggle} setToggle={setToggle} />
       </div>
+      <ToastContainer />
     </Wrapper>
   );
 }
@@ -111,7 +171,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 3vw 2vw 3vw 2vw;
+    padding: 2vw 2vw 2vw 2vw;
     * {
       color: #020c68;
     }
@@ -123,16 +183,14 @@ const Wrapper = styled.div`
     form {
       display: flex;
       flex-direction: column;
-      gap: 1.3vw;
+      gap: 1.5vw;
       .text_field {
         font-size: 1.1vw;
       }
-      .name {
+      .name,
+      .password {
         display: flex;
         gap: 2vw;
-        input {
-          width: 50%;
-        }
       }
       input {
         padding: 0.5vw;
