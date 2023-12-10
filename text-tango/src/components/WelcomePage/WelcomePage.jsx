@@ -5,10 +5,9 @@ import Login from "./Login";
 import Register from "./Register";
 
 export default function WelcomePage() {
-  let [toggle, setToggle] = useState("login");
-  console.log(toggle);
+  let [toggle, setToggle] = useState("register");
 
-  // value of toggle will never become null
+  // VALUE OF TOGGLE WILL NEVER BECOME NULL
   if (!toggle) setToggle("register");
 
   return (
