@@ -54,7 +54,7 @@ export default function Register({ toggle, setToggle }) {
 
 
   const handleValidation = () => {
-    if (values.phoneNumber < 10 || values.phoneNumber > 10) {
+    if (values.phoneNumber.length < 10 || values.phoneNumber.length > 10) {
       toast.error("phone number should have 10 digits", toastOptions);
       return false;
     } else if (values.newPassword.length < 8) {
