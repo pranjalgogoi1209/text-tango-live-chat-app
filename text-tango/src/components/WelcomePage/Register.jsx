@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ToggleBtn from "./ToggleBtn";
-import { Stack, Button } from "@mui/material";
+import { Stack, Button, TextField } from "@mui/material";
 
 export default function Register({ toggle, setToggle }) {
+  // form data : values
+  const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    password: "",
+  });
+  const handleChange = e => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+  console.log(values);
+
   return (
     <Wrapper>
       <div className="Register">
@@ -14,11 +26,72 @@ export default function Register({ toggle, setToggle }) {
 
         <form>
           <div className="name">
-            <input type="name" placeholder="Enter first-name" />
-            <input type="name" placeholder="Enter last-name" />
+            <TextField
+              InputLabelProps={{ className: "text_field" }}
+              sx={{
+                "& .MuiInputBase-root": {
+                  height: "3vw",
+                  fontSize: "1.1vw",
+                },
+              }}
+              name="firstName"
+              label="First-Name"
+              size="small"
+              required
+              error={!values.firstName}
+              onChange={e => handleChange(e)}
+            />
+            <TextField
+              InputLabelProps={{ className: "text_field" }}
+              sx={{
+                "& .MuiInputBase-root": {
+                  height: "3vw",
+                  fontSize: "1.1vw",
+                },
+              }}
+              name="lastName"
+              label="Last-Name"
+              size="small"
+              required
+              error={!values.lastName}
+              onChange={e => handleChange(e)}
+            />
           </div>
-          <input type="email" placeholder="Enter your email" />
-          <input type="password" placeholder="Enter new password" />
+
+          <TextField
+            InputLabelProps={{ className: "text_field" }}
+            sx={{
+              "& .MuiInputBase-root": {
+                height: "3vw",
+                fontSize: "1.1vw",
+              },
+            }}
+            type="number"
+            name="phoneNumber"
+            label="Phone"
+            size="small"
+            required
+            error={!values.phoneNumber}
+            onChange={e => handleChange(e)}
+          />
+
+          <TextField
+            InputLabelProps={{ className: "text_field" }}
+            sx={{
+              "& .MuiInputBase-root": {
+                height: "3vw",
+                fontSize: "1.1vw",
+              },
+            }}
+            type="password"
+            name="password"
+            label="New-Password"
+            size="small"
+            required
+            error={!values.password}
+            onChange={e => handleChange(e)}
+          />
+
           <Stack direction="row">
             <Button variant="outlined" size="small">
               Submit
@@ -51,6 +124,9 @@ const Wrapper = styled.div`
       display: flex;
       flex-direction: column;
       gap: 1.3vw;
+      .text_field {
+        font-size: 1.1vw;
+      }
       .name {
         display: flex;
         gap: 2vw;
