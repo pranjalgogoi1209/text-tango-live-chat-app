@@ -28,7 +28,10 @@ export default function Register({ toggle, setToggle }) {
     theme: "light",
   };
   const handleValidation = () => {
-    if (values.newPassword.length < 8) {
+    if (values.phoneNumber < 10 || values.phoneNumber > 10) {
+      toast.error("phone number should have 10 digits", toastOptions);
+      return false;
+    } else if (values.newPassword.length < 8) {
       toast.error(
         "password length should be equal to or more than 8 characters",
         toastOptions
