@@ -21,6 +21,7 @@ export default function Login({ toggle, setToggle }) {
             sx={{
               "& .MuiInputBase-root": {
                 height: "3vw",
+                fontSize: "1.1vw",
               },
             }}
             type="number"
@@ -35,6 +36,7 @@ export default function Login({ toggle, setToggle }) {
             sx={{
               "& .MuiInputBase-root": {
                 height: "3vw",
+                fontSize: "1.1vw",
               },
             }}
             type="password"
