@@ -13,7 +13,7 @@ connectdb(DATABASE_URL);
 app.use(express.json());
 app.use(cors());
 app.use("/user", auth);
-app.use("/chats", chats);
+app.use("/chat", chats);
 
 try {
     app.listen(port, () => {

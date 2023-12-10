@@ -5,8 +5,54 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import User from "./User";
+import { newChatLink, deleteChatLink } from "../../../apiconfig";
 
 export default function ChatSidebar() {
+
+  const addNewChat = (name, number, userId) =>{
+    const data={name, number, userId};
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    };
+    fetch(newChatLink, options)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  }
+  // addNewChat("pranjal", 1234567890, "6575c9f5ad262e8fa5d027d8");
+
+  const deleteChat = (userId, chatId) =>{
+    const data={userId, chatId};
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(deleteChatLink, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  }
+  // deleteChat("6575c9f5ad262e8fa5d027d8", "6575cf874f8e9ab1e6cda5f9");
+
+
   return (
     <Wrapper>
       <div className="ChatSidebar">
