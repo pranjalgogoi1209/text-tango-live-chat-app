@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function User() {
+export default function User({ addNewUser }) {
+  console.log(addNewUser);
   return (
     <Wrapper>
       <div className="User">
@@ -13,9 +14,13 @@ export default function User() {
             />
           </div>
           <div>
-            <p>
-              <strong>Pranjal Gogoi</strong>
-            </p>
+            {addNewUser && (
+              <p>
+                <strong>
+                  {addNewUser.firstName} {addNewUser.lastName}
+                </strong>
+              </p>
+            )}
             <p>
               <small>Hello, Good Morning...!</small>
             </p>

@@ -4,7 +4,7 @@ import welcomeImg from "./../../assets/welcome-img.png";
 import Login from "./Login";
 import Register from "./Register";
 
-export default function WelcomePage() {
+export default function WelcomePage({ setUserId }) {
   let [toggle, setToggle] = useState("register");
 
   // VALUE OF TOGGLE WILL NEVER BECOME NULL
@@ -18,7 +18,11 @@ export default function WelcomePage() {
         </div>
         <div className="auth">
           {toggle === "login" && (
-            <Login toggle={toggle} setToggle={setToggle} />
+            <Login
+              toggle={toggle}
+              setToggle={setToggle}
+              setUserId={setUserId}
+            />
           )}
           {toggle === "register" && (
             <Register toggle={toggle} setToggle={setToggle} />
