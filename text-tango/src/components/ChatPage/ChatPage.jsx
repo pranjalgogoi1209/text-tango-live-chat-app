@@ -2,8 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatSidebar from "./ChatSidebar";
+import { getChatsLink } from "../../../apiconfig";
 
 export default function ChatPage() {
+
+  const getAllChats = (userId) => {
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(`${getChatsLink}/${userId}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+  // getAllChats("6575c9f5ad262e8fa5d027d8");
+
   return (
     <Wrapper>
       <div className="ChatPage">
