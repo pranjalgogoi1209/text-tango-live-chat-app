@@ -1,40 +1,37 @@
-/** @format */
-
 import React, { useState } from "react";
 import styled from "styled-components";
-import ToggleBtn from "./ToggleBtn";
 import { Stack, Button, TextField } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { signupLink } from "../../../apiconfig";
+import { useNavigate } from "react-router-dom";
 
-export default function Register({ toggle, setToggle }) {
+export let newUser;
+
+export default function AddUser({ setAddNewUser }) {
+  const Navigate = useNavigate();
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    newPassword: "",
-    confirmPassword: "",
   });
 
-  // IMPORTING DATA FROM REGISTER FORM
+  // IMPORTING DATA FROM LOGIN FORM
   const handleChange = e => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   // VALIDATION TOASTIFY
   const toastOptions = {
-    position: "bottom-right",
-    autoClose: 4000,
+    position: "bottom-left",
+    autoClose: 1000,
     pauseOnHover: true,
     draggable: true,
     theme: "light",
   };
 
-  // POST REQUEST TO SIGNUPLINK API
-  const postNewUser = (firstName, lastName, number, password) => {
-    console.log("postnewuser");
-    const data = { firstName, lastName, number, password };
+  // POST REQUEST TO API
+  /* const signInUser = (number, password) => {
+    const data = { number, password };
     const options = {
       method: "POST",
       headers: {
@@ -42,40 +39,25 @@ export default function Register({ toggle, setToggle }) {
       },
       body: JSON.stringify(data),
     };
-    fetch(signupLink, options)
+    fetch(signinLink, options)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         if (data.code === 404) {
           toast.error(
-            "you are already registered, please login to continue",
+            "your phone number or password is incorrect",
             toastOptions
           );
         } else {
-          toast.success("Registered Successfully", toastOptions);
-          setTimeout(() => {
-            setToggle("login");
-          }, 5000);
+          setUserId(data.user._id);
+          Navigate("/chat");
         }
       })
-      .catch(error => console.log(error.message));
-  };
+      .catch(error => console.log(error));
+  }; */
 
   const handleValidation = () => {
     if (values.phoneNumber.length < 10 || values.phoneNumber.length > 10) {
       toast.error("phone number should have 10 digits", toastOptions);
-      return false;
-    } else if (values.newPassword.length < 8) {
-      toast.error(
-        "password length should be equal to or more than 8 characters",
-        toastOptions
-      );
-      return false;
-    } else if (values.newPassword !== values.confirmPassword) {
-      toast.error(
-        "new-password and confirm-password should be same",
-        toastOptions
-      );
       return false;
     }
     return true;
@@ -84,27 +66,22 @@ export default function Register({ toggle, setToggle }) {
   // FORM SUBMISSION
   const handleSubmit = e => {
     e.preventDefault();
-
     if (handleValidation()) {
-      postNewUser(
-        values.firstName,
-        values.lastName,
-        values.phoneNumber,
-        values.newPassword
-      );
+      toast.success("Added Successfully", toastOptions);
+      // Navigate to Chat box of new User
+      setAddNewUser(values);
     }
   };
 
   return (
     <Wrapper>
-      <div className="Register">
+      <div className="Login">
         <header>
-          <h1>Register</h1>
-          <p>Please register to continue</p>
+          <h1>Add a Person</h1>
         </header>
 
         <form onSubmit={e => handleSubmit(e)}>
-          <div className="name">
+          <Stack spacing={4}>
             <TextField
               InputLabelProps={{ className: "text_field" }}
               sx={{
@@ -115,6 +92,7 @@ export default function Register({ toggle, setToggle }) {
               }}
               name="firstName"
               label="First-Name"
+              variant="standard"
               size="small"
               required
               error={!values.firstName}
@@ -130,31 +108,12 @@ export default function Register({ toggle, setToggle }) {
               }}
               name="lastName"
               label="Last-Name"
+              variant="standard"
               size="small"
               required
               error={!values.lastName}
               onChange={e => handleChange(e)}
             />
-          </div>
-
-          <TextField
-            InputLabelProps={{ className: "text_field" }}
-            sx={{
-              "& .MuiInputBase-root": {
-                height: "3vw",
-                fontSize: "1.1vw",
-              },
-            }}
-            type="number"
-            name="phoneNumber"
-            label="Phone-Number"
-            size="small"
-            required
-            error={!values.phoneNumber}
-            onChange={e => handleChange(e)}
-          />
-
-          <div className="password">
             <TextField
               InputLabelProps={{ className: "text_field" }}
               sx={{
@@ -163,40 +122,28 @@ export default function Register({ toggle, setToggle }) {
                   fontSize: "1.1vw",
                 },
               }}
-              type="password"
-              name="newPassword"
-              label="New-Password"
+              type="number"
+              name="phoneNumber"
+              label="Phone-Number"
+              variant="standard"
               size="small"
               required
-              error={!values.newPassword}
+              error={!values.phoneNumber}
               onChange={e => handleChange(e)}
             />
-            <TextField
-              InputLabelProps={{ className: "text_field" }}
-              sx={{
-                "& .MuiInputBase-root": {
-                  height: "3vw",
-                  fontSize: "1.1vw",
-                },
-              }}
-              type="password"
-              name="confirmPassword"
-              label="Confirm-Password"
-              size="small"
-              required
-              error={!values.confirmPassword}
-              onChange={e => handleChange(e)}
-            />
-          </div>
+          </Stack>
 
-          <Stack direction="row">
-            <Button type="submit" variant="outlined" size="small">
+          <Stack>
+            <Button
+              className="btn"
+              type="submit"
+              variant="contained"
+              size="large"
+            >
               Submit
             </Button>
           </Stack>
         </form>
-
-        <ToggleBtn toggle={toggle} setToggle={setToggle} />
       </div>
       <ToastContainer />
     </Wrapper>
@@ -205,35 +152,31 @@ export default function Register({ toggle, setToggle }) {
 
 const Wrapper = styled.div`
   height: 100%;
-  .Register {
+  .Login {
+    border: 1px solid black;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 5vw;
     padding: 2vw 2vw 2vw 2vw;
     * {
       color: #020c68;
     }
     header {
-      display: flex;
-      flex-direction: column;
-      gap: 1vw;
+      text-align: center;
     }
     form {
       display: flex;
       flex-direction: column;
-      gap: 1.5vw;
+      gap: 4vw;
       .text_field {
         font-size: 1.1vw;
       }
-      .name,
-      .password {
-        display: flex;
-        gap: 2vw;
-      }
-      input {
-        padding: 0.5vw;
-        height: 3vw;
+
+      .btn {
+        color: white;
+        background-color: #007aff;
       }
     }
   }

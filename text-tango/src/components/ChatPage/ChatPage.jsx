@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatSidebar from "./ChatSidebar";
 import { getChatsLink } from "../../../apiconfig";
+import ChatWelcome from "./ChatWelcome";
+import AddUser from "./AddUser";
 
-export default function ChatPage() {
-
-  const getAllChats = (userId) => {
+export default function ChatPage({ userId }) {
+  const [isAddUser, setIsAddUser] = useState(false);
+  const [addNewUser, setAddNewUser] = useState();
+  const getAllChats = userId => {
     const options = {
       method: "GET",
       headers: {
@@ -14,23 +17,30 @@ export default function ChatPage() {
       },
     };
     fetch(`${getChatsLink}/${userId}`, options)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
-  // getAllChats("6575c9f5ad262e8fa5d027d8");
 
+  userId && getAllChats(userId);
+
+  console.log(userId);
   return (
     <Wrapper>
       <div className="ChatPage">
         <div className="ChatSidebar">
-          <ChatSidebar />
+          <ChatSidebar setIsAddUser={setIsAddUser} addNewUser={addNewUser} />
         </div>
         <div className="ChatContainer">
-          <ChatContainer />
+          {/* <ChatContainer /> */}
+          {isAddUser ? (
+            <AddUser setAddNewUser={setAddNewUser} />
+          ) : (
+            <ChatWelcome />
+          )}
         </div>
       </div>
     </Wrapper>

@@ -7,34 +7,33 @@ import SearchIcon from "@mui/icons-material/Search";
 import User from "./User";
 import { newChatLink, deleteChatLink } from "../../../apiconfig";
 
-export default function ChatSidebar() {
-
-  const addNewChat = (name, number, userId) =>{
-    const data={name, number, userId};
+export default function ChatSidebar({ setIsAddUser, addNewUser }) {
+  const addNewChat = (name, number, userId) => {
+    const data = { name, number, userId };
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     };
     fetch(newChatLink, options)
-      .then((response) => {
+      .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
-  }
+      .catch(error => console.log(error));
+  };
   // addNewChat("pranjal", 1234567890, "6575c9f5ad262e8fa5d027d8");
 
-  const deleteChat = (userId, chatId) =>{
-    const data={userId, chatId};
+  const deleteChat = (userId, chatId) => {
+    const data = { userId, chatId };
     const options = {
       method: "DELETE",
       headers: {
@@ -43,15 +42,14 @@ export default function ChatSidebar() {
       body: JSON.stringify(data),
     };
     fetch(deleteChatLink, options)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
-  }
+      .catch(error => console.log(error));
+  };
   // deleteChat("6575c9f5ad262e8fa5d027d8", "6575cf874f8e9ab1e6cda5f9");
-
 
   return (
     <Wrapper>
@@ -59,10 +57,10 @@ export default function ChatSidebar() {
         {/* header */}
         <header>
           <div>
-            <h1>TEXT-TANGO</h1>
+            <h1>Text-Tango</h1>
           </div>
           <div className="header-icons">
-            <IconButton>
+            <IconButton onClick={() => setIsAddUser(true)}>
               <AddCircleIcon />
             </IconButton>
             <IconButton>
@@ -81,9 +79,7 @@ export default function ChatSidebar() {
 
         {/* users */}
         <div className="users">
-          <User />
-          <User />
-          <User />
+          {addNewUser && <User addNewUser={addNewUser} />}
         </div>
       </div>
     </Wrapper>
@@ -104,10 +100,12 @@ const Wrapper = styled.div`
     header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       .header-icons {
         display: flex;
         svg {
           color: #fff;
+          font-size: 2.3vw;
         }
       }
     }

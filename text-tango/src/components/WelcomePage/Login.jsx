@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { signinLink } from "../../../apiconfig";
 import { useNavigate } from "react-router-dom";
 
-export default function Login({ toggle, setToggle }) {
+export default function Login({ toggle, setToggle, setUserId }) {
   const Navigate = useNavigate();
   const [values, setValues] = useState({
     phoneNumber: "",
@@ -41,12 +41,13 @@ export default function Login({ toggle, setToggle }) {
     fetch(signinLink, options)
       .then(response => response.json())
       .then(data => {
-        if (data.message === "user not found") {
+        if (data.code === 404) {
           toast.error(
             "your phone number or password is incorrect",
             toastOptions
           );
         } else {
+          setUserId(data.user._id);
           Navigate("/chat");
         }
       })
