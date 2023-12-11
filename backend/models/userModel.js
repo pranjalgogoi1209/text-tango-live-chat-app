@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema({
-    name: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     number: { type: Number, required: true },
     password: { type: String, required: true },
     chats: [{
         name: { type: String, required: true },
         number: { type: Number, required: true },
         messages: [{
-            status: { type: Boolean, required: true },
+            send: { type: Boolean, required: true },
             message: { type: String, required: true },
-            timeStamp: { type: Number, required: true }
+            timeStamp: { type: Date, default: Date.now, required: true }
         }],
         lastMessage: { type: String },
         lastTime: { type: Number }
@@ -18,7 +19,7 @@ const userSchema = mongoose.Schema({
     groupChats: [{
         type: mongoose.Types.ObjectId, ref: "groupChat", required: true
     }]
-})
+}, { timestamps: true })
 
 const userModel = new mongoose.model("user", userSchema);
 

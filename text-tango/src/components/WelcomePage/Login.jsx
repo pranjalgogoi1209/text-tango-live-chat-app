@@ -2,10 +2,30 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ToggleBtn from "./ToggleBtn";
 import { Stack, Button, TextField } from "@mui/material";
+import { signinLink } from "../../../apiconfig";
 
 export default function Login({ toggle, setToggle }) {
   const [numberValue, setNumberValue] = useState("");
   const [passValue, setPassValue] = useState("");
+
+  const signInUser = ( number, password) => {
+    const data = { number, password };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(signinLink, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+  // signInUser(1234567890, "123456");
 
   return (
     <Wrapper>

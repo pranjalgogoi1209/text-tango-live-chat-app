@@ -2,8 +2,81 @@ import React from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-
+import { deleteChatLink, deleteMessageLink, newChatMessageLink, updateChatLink } from "../../../apiconfig";
 export default function ChatContainer() {
+
+  const updateChat = (newName , userId, chatId) => {
+    const data = { newName, userId, chatId };
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(updateChatLink, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const deleteChat = (userId, chatId) => {
+    const data = { userId, chatId };
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(deleteChatLink, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const saveNewChatMessage = (userId, chatId, send, message) => {
+    const data = { userId, chatId, send, message };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(newChatMessageLink, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const deleteChatMessage = (userId, chatId, messageId) => {
+    const data = { userId, chatId, messageId };
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(deleteMessageLink, options)
+      .then((response) => response.json())
+      .then((data) => {
+        // use your data here
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <Wrapper>
       <div className="ChatContainer">

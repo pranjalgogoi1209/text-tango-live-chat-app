@@ -1,9 +1,13 @@
+/** @format */
+
 import React, { useState } from "react";
 import styled from "styled-components";
 import ToggleBtn from "./ToggleBtn";
 import { Stack, Button, TextField } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { signupLink } from "../../../apiconfig";
 
 export default function Register({ toggle, setToggle }) {
   const [values, setValues] = useState({
@@ -15,7 +19,7 @@ export default function Register({ toggle, setToggle }) {
   });
 
   // IMPORTING DATA FROM FORM
-  const handleChange = e => {
+  const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
@@ -27,6 +31,28 @@ export default function Register({ toggle, setToggle }) {
     draggable: true,
     theme: "light",
   };
+
+  const postNewUser = (firstName, lastName, number, password) => {
+    console.log("postnewuser")
+    const data = { firstName, lastName, number, password };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify(data)
+    };
+    fetch(signupLink, options)
+    .then(response => response.json())
+    .then(data => {
+      // use your data here
+      console.log(data)
+    })
+    .catch(error => console.log(error))
+  };
+  // postNewUser("shivam", "praja", 1234567890, "123456");
+
+
   const handleValidation = () => {
     if (values.phoneNumber.length < 10 || values.phoneNumber.length > 10) {
       toast.error("phone number should have 10 digits", toastOptions);
@@ -48,7 +74,7 @@ export default function Register({ toggle, setToggle }) {
   };
 
   // FORM SUBMISSION
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (handleValidation()) {
       toast.success("Registered Successfully", toastOptions);
@@ -67,7 +93,7 @@ export default function Register({ toggle, setToggle }) {
           <p>Please register to continue</p>
         </header>
 
-        <form onSubmit={e => handleSubmit(e)}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className="name">
             <TextField
               InputLabelProps={{ className: "text_field" }}
@@ -82,7 +108,7 @@ export default function Register({ toggle, setToggle }) {
               size="small"
               required
               error={!values.firstName}
-              onChange={e => handleChange(e)}
+              onChange={(e) => handleChange(e)}
             />
             <TextField
               InputLabelProps={{ className: "text_field" }}
@@ -97,7 +123,7 @@ export default function Register({ toggle, setToggle }) {
               size="small"
               required
               error={!values.lastName}
-              onChange={e => handleChange(e)}
+              onChange={(e) => handleChange(e)}
             />
           </div>
 
@@ -115,7 +141,7 @@ export default function Register({ toggle, setToggle }) {
             size="small"
             required
             error={!values.phoneNumber}
-            onChange={e => handleChange(e)}
+            onChange={(e) => handleChange(e)}
           />
 
           <div className="password">
@@ -133,7 +159,7 @@ export default function Register({ toggle, setToggle }) {
               size="small"
               required
               error={!values.newPassword}
-              onChange={e => handleChange(e)}
+              onChange={(e) => handleChange(e)}
             />
             <TextField
               InputLabelProps={{ className: "text_field" }}
@@ -149,18 +175,24 @@ export default function Register({ toggle, setToggle }) {
               size="small"
               required
               error={!values.confirmPassword}
-              onChange={e => handleChange(e)}
+              onChange={(e) => handleChange(e)}
             />
           </div>
 
           <Stack direction="row">
-            <Button type="submit" variant="outlined" size="small">
+            <Button
+              type="submit"
+              variant="outlined"
+              size="small">
               Submit
             </Button>
           </Stack>
         </form>
 
-        <ToggleBtn toggle={toggle} setToggle={setToggle} />
+        <ToggleBtn
+          toggle={toggle}
+          setToggle={setToggle}
+        />
       </div>
       <ToastContainer />
     </Wrapper>

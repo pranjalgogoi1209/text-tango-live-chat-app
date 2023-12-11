@@ -2,14 +2,14 @@ import userModel from "../models/userModel.js";
 
 class userController {
     static newUser = async (req, res) => {
-        const { name, number, password } = req.body;
+        const { firstName, lastName, number, password } = req.body;
         const check = await userModel.findOne({ number });
         if (check) {
             res.status(404).send({ message: "user already exits", code: 404 });
         }
         else {
             const newUser = new userModel({
-                name, number, password, chats: []
+                firstName,lastName, number, password, chats: []
             })
             try {
                 await newUser.save();
