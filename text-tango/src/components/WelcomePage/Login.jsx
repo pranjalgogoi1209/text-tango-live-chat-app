@@ -2,13 +2,34 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ToggleBtn from "./ToggleBtn";
 import { Stack, Button, TextField } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { signinLink } from "../../../apiconfig";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({ toggle, setToggle }) {
-  const [numberValue, setNumberValue] = useState("");
-  const [passValue, setPassValue] = useState("");
+  const Navigate = useNavigate();
+  const [values, setValues] = useState({
+    phoneNumber: "",
+    password: "",
+  });
 
-  const signInUser = ( number, password) => {
+  // IMPORTING DATA FROM LOGIN FORM
+  const handleChange = e => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  // VALIDATION TOASTIFY
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 4000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "light",
+  };
+
+  // POST REQUEST TO SIGNINLINK API
+  const signInUser = (number, password) => {
     const data = { number, password };
     const options = {
       method: "POST",
@@ -18,14 +39,25 @@ export default function Login({ toggle, setToggle }) {
       body: JSON.stringify(data),
     };
     fetch(signinLink, options)
-      .then((response) => response.json())
-      .then((data) => {
-        // use your data here
-        console.log(data);
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === "user not found") {
+          toast.error(
+            "your phone number or password is incorrect",
+            toastOptions
+          );
+        } else {
+          Navigate("/chat");
+        }
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
-  // signInUser(1234567890, "123456");
+
+  // FORM SUBMISSION
+  const handleSubmit = e => {
+    e.preventDefault();
+    signInUser(values.phoneNumber, values.password);
+  };
 
   return (
     <Wrapper>
@@ -35,7 +67,7 @@ export default function Login({ toggle, setToggle }) {
           <p>Please login to continue</p>
         </header>
 
-        <form>
+        <form onSubmit={e => handleSubmit(e)}>
           <TextField
             InputLabelProps={{ className: "password_field" }}
             sx={{
@@ -45,11 +77,12 @@ export default function Login({ toggle, setToggle }) {
               },
             }}
             type="number"
+            name="phoneNumber"
             label="Phone"
             size="small"
             required
-            error={!numberValue}
-            onChange={e => setNumberValue(e.target.value)}
+            error={!values.phoneNumber}
+            onChange={e => handleChange(e)}
           />
           <TextField
             InputLabelProps={{ className: "password_field" }}
@@ -60,14 +93,15 @@ export default function Login({ toggle, setToggle }) {
               },
             }}
             type="password"
+            name="password"
             label="Password"
             size="small"
             required
-            error={!passValue}
-            onChange={e => setPassValue(e.target.value)}
+            error={!values.password}
+            onChange={e => handleChange(e)}
           />
           <Stack direction="row">
-            <Button variant="outlined" size="small">
+            <Button type="submit" variant="outlined" size="small">
               Submit
             </Button>
           </Stack>
@@ -79,6 +113,7 @@ export default function Login({ toggle, setToggle }) {
 
         <ToggleBtn toggle={toggle} setToggle={setToggle} />
       </div>
+      <ToastContainer />
     </Wrapper>
   );
 }
