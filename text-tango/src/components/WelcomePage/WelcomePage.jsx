@@ -3,6 +3,7 @@ import styled from "styled-components";
 import welcomeImg from "./../../assets/welcome-img.png";
 import Login from "./Login";
 import Register from "./Register";
+import SetAvatar from "./SetAvatar";
 
 export default function WelcomePage({ setUserId }) {
   let [toggle, setToggle] = useState("register");
@@ -27,6 +28,7 @@ export default function WelcomePage({ setUserId }) {
           {toggle === "register" && (
             <Register toggle={toggle} setToggle={setToggle} />
           )}
+          {toggle === "avatar" && <SetAvatar setToggle={setToggle} />}
         </div>
       </div>
     </Wrapper>

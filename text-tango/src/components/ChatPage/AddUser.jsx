@@ -153,7 +153,7 @@ export default function AddUser({ setAddNewUser }) {
 const Wrapper = styled.div`
   height: 100%;
   .Login {
-    border: 1px solid black;
+    border-radius: 1vw 0 0 1vw;
     height: 100%;
     display: flex;
     flex-direction: column;
