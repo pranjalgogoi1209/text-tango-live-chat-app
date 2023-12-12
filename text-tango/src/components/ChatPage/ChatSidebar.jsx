@@ -5,33 +5,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import User from "./User";
-import { newChatLink, deleteChatLink } from "../../../apiconfig";
+import { deleteChatLink } from "../../../apiconfig";
 
-export default function ChatSidebar({ setIsAddUser, addNewUser }) {
-  const addNewChat = (name, number, userId) => {
-    const data = { name, number, userId };
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-    fetch(newChatLink, options)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        // use your data here
-        console.log(data);
-      })
-      .catch(error => console.log(error));
-  };
-  // addNewChat("pranjal", 1234567890, "6575c9f5ad262e8fa5d027d8");
-
+export default function ChatSidebar({ setIsAddUser, newUser }) {
   const deleteChat = (userId, chatId) => {
     const data = { userId, chatId };
     const options = {
@@ -79,7 +55,10 @@ export default function ChatSidebar({ setIsAddUser, addNewUser }) {
 
         {/* users */}
         <div className="users">
-          {addNewUser && <User addNewUser={addNewUser} />}
+          {newUser &&
+            newUser.allChats.map(user => (
+              <User user={user} setIsAddUser={setIsAddUser} key={user._id} />
+            ))}
         </div>
       </div>
     </Wrapper>

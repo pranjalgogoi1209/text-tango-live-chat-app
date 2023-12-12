@@ -3,19 +3,16 @@ import styled from "styled-components";
 import { Stack, Button, TextField } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { newChatLink } from "../../../apiconfig";
 
-export let newUser;
-
-export default function AddUser({ setAddNewUser }) {
-  const Navigate = useNavigate();
+export default function AddUser({ setNewUser, userId, setIsAddUser }) {
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
     phoneNumber: "",
   });
 
-  // IMPORTING DATA FROM LOGIN FORM
+  // IMPORTING DATA FROM ADD USER FORM
   const handleChange = e => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -29,9 +26,9 @@ export default function AddUser({ setAddNewUser }) {
     theme: "light",
   };
 
-  // POST REQUEST TO API
-  /* const signInUser = (number, password) => {
-    const data = { number, password };
+  // POST REQUEST TO NEW CHAT LINK API
+  const addNewChat = (name, number, userId) => {
+    const data = { name, number, userId };
     const options = {
       method: "POST",
       headers: {
@@ -39,21 +36,20 @@ export default function AddUser({ setAddNewUser }) {
       },
       body: JSON.stringify(data),
     };
-    fetch(signinLink, options)
-      .then(response => response.json())
-      .then(data => {
-        if (data.code === 404) {
-          toast.error(
-            "your phone number or password is incorrect",
-            toastOptions
-          );
-        } else {
-          setUserId(data.user._id);
-          Navigate("/chat");
+    fetch(newChatLink, options)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        return response.json();
+      })
+      .then(data => {
+        // use your data here
+        console.log(data);
+        setNewUser(data);
       })
       .catch(error => console.log(error));
-  }; */
+  };
 
   const handleValidation = () => {
     if (values.phoneNumber.length < 10 || values.phoneNumber.length > 10) {
@@ -68,8 +64,13 @@ export default function AddUser({ setAddNewUser }) {
     e.preventDefault();
     if (handleValidation()) {
       toast.success("Added Successfully", toastOptions);
-      // Navigate to Chat box of new User
-      setAddNewUser(values);
+      addNewChat(
+        values.firstName + values.lastName,
+        values.phoneNumber,
+        userId
+      );
+      setIsAddUser(false);
+      console.log(userId);
     }
   };
 

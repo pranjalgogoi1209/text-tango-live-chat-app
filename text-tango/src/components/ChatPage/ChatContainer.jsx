@@ -2,10 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import { deleteChatLink, deleteMessageLink, newChatMessageLink, updateChatLink } from "../../../apiconfig";
-export default function ChatContainer() {
+import {
+  deleteChatLink,
+  deleteMessageLink,
+  newChatMessageLink,
+  updateChatLink,
+} from "../../../apiconfig";
 
-  const updateChat = (newName , userId, chatId) => {
+export default function ChatContainer({ newUser }) {
+  console.log(newUser);
+  const updateChat = (newName, userId, chatId) => {
     const data = { newName, userId, chatId };
     const options = {
       method: "PUT",
@@ -15,12 +21,12 @@ export default function ChatContainer() {
       body: JSON.stringify(data),
     };
     fetch(updateChatLink, options)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   const deleteChat = (userId, chatId) => {
@@ -33,12 +39,12 @@ export default function ChatContainer() {
       body: JSON.stringify(data),
     };
     fetch(deleteChatLink, options)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   const saveNewChatMessage = (userId, chatId, send, message) => {
@@ -51,12 +57,12 @@ export default function ChatContainer() {
       body: JSON.stringify(data),
     };
     fetch(newChatMessageLink, options)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   const deleteChatMessage = (userId, chatId, messageId) => {
@@ -69,12 +75,12 @@ export default function ChatContainer() {
       body: JSON.stringify(data),
     };
     fetch(deleteMessageLink, options)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // use your data here
         console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
   return (
@@ -86,7 +92,7 @@ export default function ChatContainer() {
               src="https://th.bing.com/th/id/OIP.Z2S76NihaMgTZl0wTxAM2wHaHa?rs=1&pid=ImgDetMain"
               alt="profile-picture"
             />
-            <h1>Pranjal Gogoi</h1>
+            <h1>{newUser.name}</h1>
           </div>
           <div className="online-status">
             <div></div>
@@ -123,7 +129,7 @@ const Wrapper = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.5vw;
+        gap: 2vw;
         img {
           border-radius: 50%;
           height: 4vw;
