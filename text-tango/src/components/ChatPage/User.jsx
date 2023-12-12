@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function User({ addNewUser }) {
-  console.log(addNewUser);
+export default function User({ user, setIsAddUser }) {
+  const handleClick = () => {
+    console.log("clicked on user");
+    setIsAddUser(null);
+  };
   return (
     <Wrapper>
-      <div className="User">
+      <div className="User" onClick={e => handleClick(e)}>
         <div className="left-part">
           <div className="profile-picture">
             <img
@@ -14,11 +17,9 @@ export default function User({ addNewUser }) {
             />
           </div>
           <div>
-            {addNewUser && (
+            {user && (
               <p>
-                <strong>
-                  {addNewUser.firstName} {addNewUser.lastName}
-                </strong>
+                <strong>{user.name}</strong>
               </p>
             )}
             <p>
@@ -35,6 +36,7 @@ export default function User({ addNewUser }) {
 
 const Wrapper = styled.div`
   .User {
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -50,7 +52,6 @@ const Wrapper = styled.div`
         }
       }
     }
-
     .msg-count {
       font-size: 1vw;
       display: flex;

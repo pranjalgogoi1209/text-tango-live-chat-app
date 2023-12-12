@@ -9,6 +9,7 @@ export default function SetAvatar({ setToggle }) {
     setToggle("login");
   };
   console.log(avatarSrc);
+
   return (
     <Wrapper>
       <div className="SetAvatar">

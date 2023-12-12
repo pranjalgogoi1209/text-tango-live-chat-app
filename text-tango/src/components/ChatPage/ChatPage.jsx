@@ -8,7 +8,9 @@ import AddUser from "./AddUser";
 
 export default function ChatPage({ userId }) {
   const [isAddUser, setIsAddUser] = useState(false);
-  const [addNewUser, setAddNewUser] = useState();
+  const [newUser, setNewUser] = useState();
+
+  // GET REQUEST FROM GET CHATS LINK API
   const getAllChats = userId => {
     const options = {
       method: "GET",
@@ -19,28 +21,30 @@ export default function ChatPage({ userId }) {
     fetch(`${getChatsLink}/${userId}`, options)
       .then(response => response.json())
       .then(data => {
-        // use your data here
-        console.log(data);
+        // console.log(data);
       })
       .catch(error => console.log(error));
   };
 
+  // userId is coming from Login component
   userId && getAllChats(userId);
 
-  console.log(userId);
   return (
     <Wrapper>
       <div className="ChatPage">
         <div className="ChatSidebar">
-          <ChatSidebar setIsAddUser={setIsAddUser} addNewUser={addNewUser} />
+          <ChatSidebar setIsAddUser={setIsAddUser} newUser={newUser} />
         </div>
         <div className="ChatContainer">
-          {/* <ChatContainer /> */}
-          {isAddUser ? (
-            <AddUser setAddNewUser={setAddNewUser} />
-          ) : (
-            <ChatWelcome />
+          {isAddUser === false && <ChatWelcome />}
+          {isAddUser === true && (
+            <AddUser
+              setNewUser={setNewUser}
+              userId={userId}
+              setIsAddUser={setIsAddUser}
+            />
           )}
+          {isAddUser === null && <ChatContainer newUser={newUser} />}
         </div>
       </div>
     </Wrapper>

@@ -25,7 +25,7 @@ export default function Register({ toggle, setToggle }) {
   // VALIDATION TOASTIFY
   const toastOptions = {
     position: "bottom-right",
-    autoClose: 4000,
+    autoClose: 3000,
     pauseOnHover: true,
     draggable: true,
     theme: "light",
@@ -56,7 +56,7 @@ export default function Register({ toggle, setToggle }) {
           setTimeout(() => {
             // setToggle("login");
             setToggle("avatar");
-          }, 5000);
+          }, 3500);
         }
       })
       .catch(error => console.log(error.message));
