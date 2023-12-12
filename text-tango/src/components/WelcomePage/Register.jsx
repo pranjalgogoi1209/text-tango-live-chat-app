@@ -54,7 +54,8 @@ export default function Register({ toggle, setToggle }) {
         } else {
           toast.success("Registered Successfully", toastOptions);
           setTimeout(() => {
-            setToggle("login");
+            // setToggle("login");
+            setToggle("avatar");
           }, 5000);
         }
       })
