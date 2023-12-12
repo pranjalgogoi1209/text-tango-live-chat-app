@@ -23,7 +23,7 @@ export default function AddUser({ setAddNewUser }) {
   // VALIDATION TOASTIFY
   const toastOptions = {
     position: "bottom-left",
-    autoClose: 1000,
+    autoClose: 1300,
     pauseOnHover: true,
     draggable: true,
     theme: "light",
