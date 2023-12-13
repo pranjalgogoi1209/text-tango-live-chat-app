@@ -45,7 +45,7 @@ export default function AddUser({ setNewUser, userId, setIsAddUser }) {
       })
       .then(data => {
         // use your data here
-        console.log(data);
+        console.log("AddUser", data);
         setNewUser(data);
       })
       .catch(error => console.log(error));

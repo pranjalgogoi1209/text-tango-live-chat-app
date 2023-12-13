@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
@@ -9,8 +9,8 @@ import {
   updateChatLink,
 } from "../../../apiconfig";
 
-export default function ChatContainer({ newUser }) {
-  console.log(newUser);
+export default function ChatContainer({ newUser, singleUser, userId }) {
+  const [isProfileShow, setIsProfileShow] = useState(false);
   const updateChat = (newName, userId, chatId) => {
     const data = { newName, userId, chatId };
     const options = {
@@ -29,6 +29,7 @@ export default function ChatContainer({ newUser }) {
       .catch(error => console.log(error));
   };
 
+  // DELETE REQUEST TO DELETE CHAT LINK API
   const deleteChat = (userId, chatId) => {
     const data = { userId, chatId };
     const options = {
@@ -42,7 +43,7 @@ export default function ChatContainer({ newUser }) {
       .then(response => response.json())
       .then(data => {
         // use your data here
-        console.log(data);
+        console.log("ChatContainer, Delete Chat", data);
       })
       .catch(error => console.log(error));
   };
@@ -83,23 +84,34 @@ export default function ChatContainer({ newUser }) {
       .catch(error => console.log(error));
   };
 
+  const handleDelete = e => {
+    console.log("Clicked for delete Chat");
+    deleteChat(userId, singleUser._id);
+    console.log(singleUser);
+    // I need single user data from User component to get the particle user Chat
+  };
+
   return (
     <Wrapper>
       <div className="ChatContainer">
         <header>
-          <div className="user">
+          <div className="user" onClick={() => setIsProfileShow(true)}>
             <img
               src="https://th.bing.com/th/id/OIP.Z2S76NihaMgTZl0wTxAM2wHaHa?rs=1&pid=ImgDetMain"
               alt="profile-picture"
             />
-            <h1>{newUser.name}</h1>
+            <h1>{singleUser.name}</h1>
           </div>
           <div className="online-status">
             <div></div>
             <p>online</p>
           </div>
         </header>
-        <main></main>
+        <div className={isProfileShow ? "profile show-profile" : "profile"}>
+          <h1>{singleUser.name}</h1>
+          <button onClick={e => handleDelete(e)}>Delete Chat</button>
+        </div>
+        <main onClick={() => setIsProfileShow(false)}></main>
         <footer>
           <input type="text" placeholder="Type your message here..." />
           <div className="send">
@@ -148,6 +160,23 @@ const Wrapper = styled.div`
           background-color: green;
         }
       }
+    }
+
+    .profile {
+      border-radius: 1vw 1vw 1vw 1vw;
+      background-color: #007aff;
+      padding: 2vw 2vw 2vw 2vw;
+      width: 30%;
+      height: 70%;
+      position: absolute;
+      top: 0;
+      margin-left: 0.3vw;
+      transition: all ease 0.5s;
+      transform: translateY(-100%);
+    }
+
+    .show-profile {
+      transform: translateY(0);
     }
 
     main {
