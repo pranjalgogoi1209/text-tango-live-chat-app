@@ -1,22 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function MessageBox() {
+export default function MessageBox({ isSend, msg }) {
   return (
     <Wrapper>
-      <div className="MessageBox">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam error
-        repudiandae necessitatibus.
+      <div className={isSend ? "MessageBoxRight" : "MessageBoxLeft"}>
+        {msg && <div className="msg">{msg}</div>}
       </div>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  .MessageBox {
-    padding: 1vw;
-    width: 30%;
-    border-radius: 1vw;
+  width: 30%;
+  .MessageBoxLeft {
+    border: 1vw solid #007aff;
+    border-radius: 0 1.5vw 1.5vw 1.5vw;
+  }
+  .MessageBoxRight {
+    border: 1vw solid #007aff;
+    border-radius: 1.5vw 0 1.5vw 1.5vw;
+  }
+  .msg {
+    font-size: 1.5vw;
+    padding: 0.5vw;
+    /* border-radius: 1vw; */
     background-color: #007aff;
     color: #fff;
   }
