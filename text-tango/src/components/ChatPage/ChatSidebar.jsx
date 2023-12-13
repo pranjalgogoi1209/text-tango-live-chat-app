@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -7,7 +7,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import User from "./User";
 import { deleteChatLink } from "../../../apiconfig";
 
-export default function ChatSidebar({ setIsAddUser, newUser }) {
+export default function ChatSidebar({
+  setIsAddUser,
+  newUser,
+  setSingleUser,
+  userId,
+  allChat,
+}) {
+  // new created user
+  // console.log("new created user", newUser.allChats[0]);
   const deleteChat = (userId, chatId) => {
     const data = { userId, chatId };
     const options = {
@@ -44,7 +52,6 @@ export default function ChatSidebar({ setIsAddUser, newUser }) {
             </IconButton>
           </div>
         </header>
-
         {/* search-bar */}
         <div className="search-bar">
           <IconButton>
@@ -52,13 +59,19 @@ export default function ChatSidebar({ setIsAddUser, newUser }) {
           </IconButton>
           <input type="text" placeholder="Search Here.." />
         </div>
-
         {/* users */}
         <div className="users">
-          {newUser &&
-            newUser.allChats.map(user => (
-              <User user={user} setIsAddUser={setIsAddUser} key={user._id} />
+          {/* FOR ALL CHATS  */}{" "}
+          {allChat &&
+            allChat.user.chats.map(user => (
+              <User
+                user={user}
+                setIsAddUser={setIsAddUser}
+                key={user._id}
+                setSingleUser={setSingleUser}
+              />
             ))}
+          {/* AFTER ADDUSER NEW CHAT*/}
         </div>
       </div>
     </Wrapper>

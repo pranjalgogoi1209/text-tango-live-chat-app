@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function User({ user, setIsAddUser }) {
+export default function User({ user, setIsAddUser, setSingleUser }) {
   const handleClick = () => {
     console.log("clicked on user");
     setIsAddUser(null);
+    setSingleUser(user);
   };
   return (
     <Wrapper>
