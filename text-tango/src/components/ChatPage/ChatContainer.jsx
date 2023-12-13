@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
@@ -12,10 +12,17 @@ import {
   newChatMessageLink,
   updateChatLink,
 } from "../../../apiconfig";
+import { Chat } from "@mui/icons-material";
 
 export default function ChatContainer({ newUser, singleUser, userId }) {
   console.log("singleUser => ", singleUser);
   const [isProfileShow, setIsProfileShow] = useState(false);
+  const [isSend, setIsSend] = useState(1);
+  const [msg, setMsg] = useState();
+  const [allMsgArray, setAllMsgArray] = useState(
+    singleUser.messages.map(msgObj => msgObj.message)
+  );
+  console.log("allMsgArray => ", allMsgArray);
 
   // DELETE REQUEST TO DELETE CHAT LINK API
   const deleteChat = (userId, chatId) => {
@@ -30,7 +37,6 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     fetch(deleteChatLink, options)
       .then(response => response.json())
       .then(data => {
-        // use your data here
         console.log("ChatContainer, Delete Chat", data);
       })
       .catch(error => console.log(error));
@@ -46,24 +52,6 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       body: JSON.stringify(data),
     };
     fetch(updateChatLink, options)
-      .then(response => response.json())
-      .then(data => {
-        // use your data here
-        console.log(data);
-      })
-      .catch(error => console.log(error));
-  };
-
-  const saveNewChatMessage = (userId, secondUserId, chatId, send, message) => {
-    const data = { userId, secondUserId, chatId, send, message };
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-    fetch(newChatMessageLink, options)
       .then(response => response.json())
       .then(data => {
         // use your data here
@@ -97,6 +85,40 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     console.log("chat id => ", singleUser._id);
   };
 
+  // # POST REQUEST TO SEND MESSAGE
+  const saveNewChatMessage = (userId, secondUserId, chatId, send, message) => {
+    const data = { userId, secondUserId, chatId, send, message };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(newChatMessageLink, options)
+      .then(response => response.json())
+      .then(data => {
+        // use your data here
+        console.log(data);
+        allMsgArray.push(msg);
+        console.log("New allMsgArray => ", allMsgArray);
+      })
+      .catch(error => console.log(error));
+  };
+
+  // SEND MESSAGE
+  const handleSendMessage = e => {
+    e.preventDefault();
+    saveNewChatMessage(
+      userId,
+      singleUser.secondUserId,
+      singleUser.chatId,
+      isSend,
+      msg
+    );
+    allMsgArray.push(msg);
+  };
+
   return (
     <Wrapper>
       <div className="ChatContainer">
@@ -116,12 +138,11 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
         {/* NEW USER PROFILE SHOW */}
         <div className={isProfileShow ? "profile show-profile" : "profile"}>
           <h1>
-            {/* {singleUser.name.split(" ")[0][0].toUpperCase() +
+            {singleUser.name.split(" ")[0][0].toUpperCase() +
               singleUser.name.split(" ")[0].slice(1).toLowerCase() +
               " " +
               singleUser.name.split(" ")[1][0].toUpperCase() +
-              singleUser.name.split(" ")[1].slice(1).toLowerCase()} */}
-            {singleUser.name}
+              singleUser.name.split(" ")[1].slice(1).toLowerCase()}
           </h1>
           <Stack onClick={e => handleDelete(e)}>
             <Button
@@ -144,26 +165,31 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
           </Stack>
         </div>
 
-        <main onClick={() => setIsProfileShow(false)}>
-          <MessageBox />
+        <main
+          className={isSend ? "msg-right" : null}
+          onClick={() => setIsProfileShow(false)}
+        >
+          {allMsgArray &&
+            allMsgArray
+              .reverse()
+              .map((msg, i) => (
+                <MessageBox isSend={isSend} msg={msg} key={i} />
+              ))}
         </main>
+
         <footer>
-          <input type="text" placeholder="Type your message here..." />
-          <div className="send">
-            <IconButton
-              onClick={e =>
-                saveNewChatMessage(
-                  userId,
-                  singleUser.secondUserId,
-                  singleUser.chatId,
-                  1,
-                  "ram ram bhai"
-                )
-              }
-            >
-              <SendRoundedIcon />
-            </IconButton>
-          </div>
+          <form onSubmit={e => handleSendMessage(e)}>
+            <input
+              type="text"
+              placeholder="Type your message here..."
+              onChange={e => setMsg(e.target.value)}
+            />
+            <div className="send">
+              <IconButton type="submit">
+                <SendRoundedIcon />
+              </IconButton>
+            </div>
+          </form>
         </footer>
       </div>
     </Wrapper>
@@ -171,8 +197,8 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
 }
 
 const Wrapper = styled.div`
+  height: 100vh;
   .ChatContainer {
-    height: 100vh;
     /* border: 1px solid black; */
     header {
       color: #1a1a1a;
@@ -231,12 +257,20 @@ const Wrapper = styled.div`
       transform: translateY(0);
     }
     main {
-      height: 73vh;
+      border: 1px solid black;
+      /* height: 73%; */
       padding: 2vw;
       display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 1vw;
+      overflow: scroll;
+      overflow-x: hidden;
+    }
+    .msg-right {
       align-items: flex-end;
     }
-    footer {
+    footer form {
       background-color: #ebebeb;
       display: flex;
       gap: 1vw;
@@ -248,6 +282,7 @@ const Wrapper = styled.div`
         background-color: transparent;
         outline: none;
         border: none;
+        width: 100%;
       }
       ::placeholder {
       }

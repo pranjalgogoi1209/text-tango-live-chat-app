@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 export default function User({ user, setIsAddUser, setSingleUser }) {
+  console.log(user);
   const handleClick = () => {
-    console.log("clicked on user");
     setIsAddUser(null);
     setSingleUser(user);
   };
