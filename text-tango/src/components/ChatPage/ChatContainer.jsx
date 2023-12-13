@@ -14,7 +14,7 @@ import {
 } from "../../../apiconfig";
 
 export default function ChatContainer({ newUser, singleUser, userId }) {
-  console.log(newUser, singleUser, userId);
+  console.log("singleUser => ", singleUser);
   const [isProfileShow, setIsProfileShow] = useState(false);
 
   // DELETE REQUEST TO DELETE CHAT LINK API
@@ -150,7 +150,17 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
         <footer>
           <input type="text" placeholder="Type your message here..." />
           <div className="send">
-            <IconButton onClick={(e)=>saveNewChatMessage(userId, singleUser.secondUserId, singleUser.chatId, 1, "ram ram bhai")}>
+            <IconButton
+              onClick={e =>
+                saveNewChatMessage(
+                  userId,
+                  singleUser.secondUserId,
+                  singleUser.chatId,
+                  1,
+                  "ram ram bhai"
+                )
+              }
+            >
               <SendRoundedIcon />
             </IconButton>
           </div>
