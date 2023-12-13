@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Stack, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import MessageBox from "./MessageBox";
 
 import {
   deleteChatLink,
@@ -13,7 +14,7 @@ import {
 } from "../../../apiconfig";
 
 export default function ChatContainer({ newUser, singleUser, userId }) {
-  console.log(newUser, singleUser, userId);
+  console.log("singleUser => ", singleUser);
   const [isProfileShow, setIsProfileShow] = useState(false);
 
   // DELETE REQUEST TO DELETE CHAT LINK API
@@ -143,11 +144,23 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
           </Stack>
         </div>
 
-        <main onClick={() => setIsProfileShow(false)}></main>
+        <main onClick={() => setIsProfileShow(false)}>
+          <MessageBox />
+        </main>
         <footer>
           <input type="text" placeholder="Type your message here..." />
           <div className="send">
-            <IconButton onClick={(e)=>saveNewChatMessage(userId, singleUser.secondUserId, singleUser.chatId, 1, "ram ram bhai")}>
+            <IconButton
+              onClick={e =>
+                saveNewChatMessage(
+                  userId,
+                  singleUser.secondUserId,
+                  singleUser.chatId,
+                  1,
+                  "ram ram bhai"
+                )
+              }
+            >
               <SendRoundedIcon />
             </IconButton>
           </div>
@@ -214,15 +227,15 @@ const Wrapper = styled.div`
         text-align: center;
       }
     }
-
     .show-profile {
       transform: translateY(0);
     }
-
     main {
       height: 73vh;
+      padding: 2vw;
+      display: flex;
+      align-items: flex-end;
     }
-
     footer {
       background-color: #ebebeb;
       display: flex;
