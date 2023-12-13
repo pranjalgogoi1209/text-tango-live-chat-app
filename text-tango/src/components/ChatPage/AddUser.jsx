@@ -65,7 +65,7 @@ export default function AddUser({ setNewUser, userId, setIsAddUser }) {
     if (handleValidation()) {
       toast.success("Added Successfully", toastOptions);
       addNewChat(
-        values.firstName + values.lastName,
+        values.firstName + " " + values.lastName,
         values.phoneNumber,
         userId
       );
