@@ -85,11 +85,12 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2vw;
-    padding: 2vw;
+    padding: 2vw 1vw 0 2vw;
     height: 100%;
     background-color: #007aff;
     color: #fff;
     header {
+      padding-right: 1vw;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -107,6 +108,7 @@ const Wrapper = styled.div`
       gap: 1vw;
       background-color: rgb(255, 255, 255, 0.2);
       padding: 0.5vw;
+      margin-right: 1vw;
       border-radius: 0.5vw;
       svg {
         color: #fff;
@@ -124,9 +126,24 @@ const Wrapper = styled.div`
     }
 
     .users {
+      padding-right: 2vw;
+      overflow: scroll;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
       gap: 2vw;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0.8vw;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: #007aff;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #fff;
+      border-radius: 2vw;
+      border: none;
     }
   }
 `;

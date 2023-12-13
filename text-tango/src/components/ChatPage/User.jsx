@@ -17,7 +17,7 @@ export default function User({ user, setIsAddUser, setSingleUser }) {
               alt="profile-picture"
             />
           </div>
-          <div>
+          <div className="name">
             {user && (
               <p>
                 <strong>{user.name}</strong>
@@ -45,6 +45,9 @@ const Wrapper = styled.div`
       align-items: center;
       display: flex;
       gap: 2vw;
+      .name {
+        width: 20vw;
+      }
       .profile-picture {
         img {
           border-radius: 50%;
