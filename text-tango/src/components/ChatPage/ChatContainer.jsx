@@ -13,6 +13,7 @@ import {
 } from "../../../apiconfig";
 
 export default function ChatContainer({ newUser, singleUser, userId }) {
+  console.log(newUser, singleUser, userId);
   const [isProfileShow, setIsProfileShow] = useState(false);
 
   // DELETE REQUEST TO DELETE CHAT LINK API
@@ -52,8 +53,8 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       .catch(error => console.log(error));
   };
 
-  const saveNewChatMessage = (userId, chatId, send, message) => {
-    const data = { userId, chatId, send, message };
+  const saveNewChatMessage = (userId, secondUserId, chatId, send, message) => {
+    const data = { userId, secondUserId, chatId, send, message };
     const options = {
       method: "POST",
       headers: {
@@ -146,7 +147,7 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
         <footer>
           <input type="text" placeholder="Type your message here..." />
           <div className="send">
-            <IconButton>
+            <IconButton onClick={(e)=>saveNewChatMessage(userId, singleUser.secondUserId, singleUser.chatId, 1, "ram ram bhai")}>
               <SendRoundedIcon />
             </IconButton>
           </div>
