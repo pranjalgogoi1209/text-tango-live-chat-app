@@ -12,39 +12,77 @@ class chatController {
 
   static addNewChat = async (req, res) => {
     console.log("addnewchat");
-    const { name, number, userId } = req.body;
-    const user = await userModel.findById(userId);
-    const newChat = {
-      name,
-      number,
-      messages: [],
-      lastMessage: "",
-      lastTime: "",
-    };
+
     try {
-      // const existingChat = await user.chats.findOne({ number });
-      const existingChat = user.chats.find(chat => chat.number === number);
-      if (existingChat)
-        res.status(202).json({ message: "Chat already exits", existingChat });
-      else {
-        try {
-          await user.chats.unshift(newChat);
-          await user.save();
-          const allChats = user.chats;
-          res
-            .status(202)
-            .json({ message: "new chat created", code: "202", allChats });
-        } catch (error) {
-          res.status(404).json({
-            message: "problem in creating new chat",
-            code: "404",
-            error,
-          });
-        }
+      const { name, number, userId } = req.body;
+
+      // Find the user creating the chat
+      const user = await userModel.findById(userId);
+      console.log(user, userId);
+      // Find the user being invited to the chat
+      const secondUser = await userModel.findOne({ number });
+
+      // If the invited user is not found, return an error response
+      if (!secondUser) {
+        return res.status(404).json({
+          message: "User not found, ask them to register on the app first",
+          code: "404"
+        });
       }
+
+      // Extract the necessary information from the second user
+      const secondUserId = secondUser._id.toString();
+      const chatId = user.number + number;
+
+      // Prepare the new chat for both users
+      const newChat = {
+        name,
+        number,
+        secondUserId,
+        chatId,
+        messages: [],
+        lastMessage: "",
+        lastTime: "",
+      };
+
+      const otherChat = {
+        name: user.firstName,
+        number: user.number,
+        secondUserId: userId,
+        chatId,
+        messages: [],
+        lastMessage: "",
+        lastTime: "",
+      };
+
+      console.log(newChat, otherChat)
+
+      // Check if the chat already exists
+      const existingChat = user.chats.find(chat => chat.number === number);
+
+      if (existingChat) {
+        console.log("Chat already exists");
+        return res.status(202).json({ message: "Chat already exists", existingChat });
+      }
+
+      // Add the new chat for both users
+      user.chats.unshift(newChat);
+      secondUser.chats.unshift(otherChat);
+
+      // Save changes to both users
+      await user.save();
+      await secondUser.save();
+
+      const allChats = user.chats;
+      res.status(202).json({ message: "New chat created", code: "202", allChats });
     } catch (error) {
-      res.status(404).json("not found");
-      console.log(error);
+      // Handle any errors that occurred during the process
+      console.error("Error creating chat:", error);
+      res.status(500).json({
+        message: "Internal server error",
+        code: "500",
+        error: error.message,
+      });
     }
   };
 
@@ -106,16 +144,17 @@ class chatController {
 
   static newChatMessage = async (req, res) => {
     try {
-      const { userId, chatId, send, message } = req.body;
+      const { userId, chatId, secondUserId, secondChatId, send, message } = req.body;
       const user = await userModel.findById(userId);
-
-      if (!user) {
+      const secondUser = await userModel.findById(secondUserId);
+      if (!user || !secondUser) {
         return res.status(404).json({ message: "User not found" });
       }
 
       const chat = user.chats.find(chat => chat._id.toString() === chatId);
+      const secondChat = secondUser.find(chat => chat._id.toString() === secondChatId);
 
-      if (!chat) {
+      if (!chat || !secondChat) {
         return res.status(404).json({ message: "Chat not found" });
       }
 
@@ -124,9 +163,15 @@ class chatController {
         message,
       };
 
-      chat.messages.unshift(newMessage);
-      await user.save();
+      const secondNewMessage = {
+        send : !send,
+        message
+      }
 
+      chat.messages.unshift(newMessage);
+      secondChat.messages.unshift(newMessage);
+      await user.save();
+      await secondUser.save();
       res.status(200).json({ message: "New message added successfully" });
     } catch (error) {
       console.error(error);

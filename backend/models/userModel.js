@@ -8,6 +8,8 @@ const userSchema = mongoose.Schema({
     chats: [{
         name: { type: String, required: true },
         number: { type: Number, required: true },
+        secondUserId : {type : String, required : true},
+        chatId: { type: String, required: true },
         messages: [{
             send: { type: Boolean, required: true },
             message: { type: String, required: true },
