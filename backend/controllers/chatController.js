@@ -144,40 +144,61 @@ class chatController {
 
   static newChatMessage = async (req, res) => {
     try {
-      const { userId, chatId, secondUserId, secondChatId, send, message } = req.body;
+      const { userId, chatId, secondUserId, send, message } = req.body;
+
+      // Find the users involved in the chat
       const user = await userModel.findById(userId);
       const secondUser = await userModel.findById(secondUserId);
+      console.log(user, secondUser, "user")
+      // Check if either user is not found
       if (!user || !secondUser) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const chat = user.chats.find(chat => chat._id.toString() === chatId);
-      const secondChat = secondUser.find(chat => chat._id.toString() === secondChatId);
+      // Find the chat for the current user
+      const chat = user.chats.find(chat => chat.chatId === chatId);
 
+      // Find the chat for the second user
+      const secondChat = secondUser.chats.find(chat => chat.chatId === chatId);
+      console.log(chat, secondChat)
+
+      // Check if either chat is not found
       if (!chat || !secondChat) {
         return res.status(404).json({ message: "Chat not found" });
       }
 
+      // Prepare new messages
       const newMessage = {
         send,
         message,
       };
 
       const secondNewMessage = {
-        send : !send,
-        message
-      }
+        send: !send,
+        message,
+      };
 
+      // Add new messages to both chats
       chat.messages.unshift(newMessage);
-      secondChat.messages.unshift(newMessage);
+      secondChat.messages.unshift(secondNewMessage);
+
+      // Save changes to both users
       await user.save();
       await secondUser.save();
+
       res.status(200).json({ message: "New message added successfully" });
     } catch (error) {
-      console.error(error);
+      console.error("Error adding new message:", error);
+
+      // Check for specific error types
+      if (error.name === "CastError" && error.kind === "ObjectId") {
+        return res.status(400).json({ message: "Invalid user or chat ID format" });
+      }
+
       res.status(500).json({ message: "Internal server error" });
     }
   };
+
 
   static deleteMessage = async (req, res) => {
     try {
