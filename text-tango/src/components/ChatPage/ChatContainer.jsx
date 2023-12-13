@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Stack, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import MessageBox from "./MessageBox";
 
 import {
   deleteChatLink,
@@ -142,7 +143,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
           </Stack>
         </div>
 
-        <main onClick={() => setIsProfileShow(false)}></main>
+        <main onClick={() => setIsProfileShow(false)}>
+          <MessageBox />
+        </main>
         <footer>
           <input type="text" placeholder="Type your message here..." />
           <div className="send">
@@ -213,15 +216,15 @@ const Wrapper = styled.div`
         text-align: center;
       }
     }
-
     .show-profile {
       transform: translateY(0);
     }
-
     main {
       height: 73vh;
+      padding: 2vw;
+      display: flex;
+      align-items: flex-end;
     }
-
     footer {
       background-color: #ebebeb;
       display: flex;
