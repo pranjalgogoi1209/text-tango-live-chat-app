@@ -192,13 +192,13 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
           {/* for empty array in singleUser.messages */}
           {singleUser.messages.length === 0 &&
             allMsgArray.map((msg, index) => (
-              <MessageBox msg={msg} key={index} />
+              <MessageBox msg={msg} isSend={isSend} key={index} />
             ))}
 
           {/* for array of objects in singleUser.messages */}
           {allMsgObjArray &&
             allMsgObjArray.map((msg, index) => (
-              <MessageBox msg={msg} key={index} />
+              <MessageBox msg={msg} isSend={isSend} key={index} />
             ))}
         </main>
 

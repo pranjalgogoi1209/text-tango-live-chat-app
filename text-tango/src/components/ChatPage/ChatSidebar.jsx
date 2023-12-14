@@ -14,6 +14,7 @@ export default function ChatSidebar({
   userId,
   allChat,
 }) {
+  const [isUserProfile, setIsUserProfile] = useState(false);
   // new created user
   // console.log("new created user", newUser.allChats[0]);
   const deleteChat = (userId, chatId) => {
@@ -35,9 +36,13 @@ export default function ChatSidebar({
   };
   // deleteChat("6575c9f5ad262e8fa5d027d8", "6575cf874f8e9ab1e6cda5f9");
 
+  const handleHideUserProfile = e => {
+    e.stopPropagation();
+  };
+
   return (
     <Wrapper>
-      <div className="ChatSidebar">
+      <div className="ChatSidebar" onClick={e => handleHideUserProfile(e)}>
         {/* header */}
         <header>
           <div>
@@ -47,11 +52,16 @@ export default function ChatSidebar({
             <IconButton onClick={() => setIsAddUser(true)}>
               <AddCircleIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => setIsUserProfile(true)}>
               <MoreVertIcon />
             </IconButton>
           </div>
         </header>
+        <section
+          className={
+            isUserProfile ? "user-profile show-user-profile" : "user-profile"
+          }
+        ></section>
 
         {/* search-bar */}
         <div className="search-bar">
@@ -107,6 +117,21 @@ const Wrapper = styled.div`
         }
       }
     }
+    .user-profile {
+      position: absolute;
+      top: 6vw;
+      left: 11.5vw;
+      background-color: #fff;
+      height: 20vw;
+      width: 20vw;
+      border-radius: 1vw;
+      transition: all ease 0.5s;
+      transform: translateY(-120%);
+    }
+    .show-user-profile {
+      transform: translateY(0);
+    }
+
     .search-bar {
       display: flex;
       gap: 1vw;
