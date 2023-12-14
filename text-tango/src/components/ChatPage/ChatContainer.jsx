@@ -32,7 +32,7 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     allMsgDataArray.map(msgObj => msgObj.message)
   );
 
-  const updateChat = (newName, userId, chatId) => {
+  /*   const updateChat = (newName, userId, chatId) => {
     const data = { newName, userId, chatId };
     const options = {
       method: "PUT",
@@ -48,9 +48,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
         console.log(data);
       })
       .catch(error => console.log(error));
-  };
+  }; */
 
-  const deleteChatMessage = (userId, chatId, messageId) => {
+  /*   const deleteChatMessage = (userId, chatId, messageId) => {
     const data = { userId, chatId, messageId };
     const options = {
       method: "DELETE",
@@ -66,7 +66,7 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
         console.log(data);
       })
       .catch(error => console.log(error));
-  };
+  }; */
 
   // # POST REQUEST TO SEND MESSAGE
   const saveNewChatMessage = (userId, secondUserId, chatId, send, message) => {

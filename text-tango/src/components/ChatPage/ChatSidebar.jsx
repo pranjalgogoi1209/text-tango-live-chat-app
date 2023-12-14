@@ -36,13 +36,14 @@ export default function ChatSidebar({
   };
   // deleteChat("6575c9f5ad262e8fa5d027d8", "6575cf874f8e9ab1e6cda5f9");
 
-  const handleHideUserProfile = e => {
+  const handleClickUserProfile = e => {
     e.stopPropagation();
+    setIsUserProfile(true);
   };
 
   return (
     <Wrapper>
-      <div className="ChatSidebar" onClick={e => handleHideUserProfile(e)}>
+      <div className="ChatSidebar" onClick={() => setIsUserProfile(false)}>
         {/* header */}
         <header>
           <div>
@@ -52,16 +53,23 @@ export default function ChatSidebar({
             <IconButton onClick={() => setIsAddUser(true)}>
               <AddCircleIcon />
             </IconButton>
-            <IconButton onClick={() => setIsUserProfile(true)}>
+            <IconButton onClick={e => handleClickUserProfile(e)}>
               <MoreVertIcon />
             </IconButton>
           </div>
         </header>
+
+        {/* show user profile section */}
         <section
           className={
-            isUserProfile ? "user-profile show-user-profile" : "user-profile"
+            isUserProfile ? "user-profile show-user-profile " : "user-profile "
           }
-        ></section>
+        >
+          {allChat && (
+            <h1>{allChat.user.firstName + " " + allChat.user.lastName}</h1>
+          )}
+          {allChat && <h2>{allChat.user.number}</h2>}
+        </section>
 
         {/* search-bar */}
         <div className="search-bar">
@@ -118,16 +126,28 @@ const Wrapper = styled.div`
       }
     }
     .user-profile {
+      display: flex;
+      flex-direction: column;
+      gap: 1vw;
+      color: #007aff;
       position: absolute;
       top: 6vw;
-      left: 11.5vw;
+      left: 11.2vw;
       background-color: #fff;
       height: 20vw;
       width: 20vw;
       border-radius: 1vw;
-      transition: all ease 0.5s;
-      transform: translateY(-120%);
+      /* transition: all ease 0.5s; */
+      transform: translateY(-140%);
+      padding: 2vw;
+      h1 {
+        font-size: 1.8vw;
+      }
+      h2 {
+        font-size: 1.2vw;
+      }
     }
+
     .show-user-profile {
       transform: translateY(0);
     }
