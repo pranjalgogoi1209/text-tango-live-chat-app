@@ -52,6 +52,7 @@ export default function ChatSidebar({
             </IconButton>
           </div>
         </header>
+
         {/* search-bar */}
         <div className="search-bar">
           <IconButton>
@@ -61,7 +62,7 @@ export default function ChatSidebar({
         </div>
         {/* users */}
         <div className="users">
-          {/* FOR ALL CHATS  */}{" "}
+          {/* FOR ALL CHATS  */}
           {allChat &&
             allChat.user.chats.map(user => (
               <User
@@ -80,8 +81,9 @@ export default function ChatSidebar({
 
 const Wrapper = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   .ChatSidebar {
+    width: 100vw;
     display: flex;
     flex-direction: column;
     gap: 2vw;
@@ -94,6 +96,9 @@ const Wrapper = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      h1 {
+        font-size: 3vw;
+      }
       .header-icons {
         display: flex;
         svg {
@@ -102,7 +107,6 @@ const Wrapper = styled.div`
         }
       }
     }
-
     .search-bar {
       display: flex;
       gap: 1vw;
@@ -119,13 +123,15 @@ const Wrapper = styled.div`
         color: #fff;
         outline: none;
         border: none;
+        width: 100%;
+        height: 100%;
       }
       ::placeholder {
         color: #fff;
       }
     }
-
     .users {
+      height: 100vh;
       padding-right: 2vw;
       overflow: scroll;
       overflow-x: hidden;

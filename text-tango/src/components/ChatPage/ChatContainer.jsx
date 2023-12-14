@@ -98,10 +98,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     fetch(newChatMessageLink, options)
       .then(response => response.json())
       .then(data => {
-        // use your data here
         console.log(data);
         allMsgArray.push(msg);
-        console.log("New allMsgArray => ", allMsgArray);
+        console.log("updated allMsgArray => ", allMsgArray);
       })
       .catch(error => console.log(error));
   };
@@ -116,12 +115,13 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       isSend,
       msg
     );
-    allMsgArray.push(msg);
+    e.target.msgbox.value = "";
   };
 
   return (
     <Wrapper>
       <div className="ChatContainer">
+        {/* header */}
         <header>
           <div className="user" onClick={() => setIsProfileShow(true)}>
             <img
@@ -135,8 +135,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
             <p>online</p>
           </div>
         </header>
-        {/* NEW USER PROFILE SHOW */}
-        <div className={isProfileShow ? "profile show-profile" : "profile"}>
+
+        {/* delete chat section */}
+        <section className={isProfileShow ? "profile show-profile" : "profile"}>
           <h1>
             {singleUser.name.split(" ")[0][0].toUpperCase() +
               singleUser.name.split(" ")[0].slice(1).toLowerCase() +
@@ -163,8 +164,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
               Delete User
             </Button>
           </Stack>
-        </div>
+        </section>
 
+        {/* main */}
         <main
           className={isSend ? "msg-right" : null}
           onClick={() => setIsProfileShow(false)}
@@ -180,6 +182,7 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
         <footer>
           <form onSubmit={e => handleSendMessage(e)}>
             <input
+              id="msgbox"
               type="text"
               placeholder="Type your message here..."
               onChange={e => setMsg(e.target.value)}
@@ -197,10 +200,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
 }
 
 const Wrapper = styled.div`
-  height: 100vh;
   .ChatContainer {
-    /* border: 1px solid black; */
     header {
+      height: 15vh;
       color: #1a1a1a;
       display: flex;
       justify-content: space-between;
@@ -218,6 +220,9 @@ const Wrapper = styled.div`
           border-radius: 50%;
           height: 4vw;
           width: 4vw;
+        }
+        h1 {
+          font-size: 2.5vw;
         }
       }
       .online-status {
@@ -241,8 +246,8 @@ const Wrapper = styled.div`
       border-radius: 1vw 1vw 1vw 1vw;
       background-color: #007aff;
       padding: 2vw 2vw 2vw 2vw;
-      width: 30%;
-      height: 70%;
+      width: 30vw;
+      height: 30vw;
       position: absolute;
       top: 0;
       margin-left: 0.3vw;
@@ -257,8 +262,7 @@ const Wrapper = styled.div`
       transform: translateY(0);
     }
     main {
-      border: 1px solid black;
-      /* height: 73%; */
+      height: 74vh;
       padding: 2vw;
       display: flex;
       flex-direction: column;
@@ -270,31 +274,36 @@ const Wrapper = styled.div`
     .msg-right {
       align-items: flex-end;
     }
-    footer form {
-      background-color: #ebebeb;
-      display: flex;
-      gap: 1vw;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1vw;
-      border-radius: 0.5vw;
-      input {
-        background-color: transparent;
-        outline: none;
-        border: none;
-        width: 100%;
-      }
-      ::placeholder {
-      }
-      .send {
+
+    footer {
+      height: 10vh;
+      form {
+        background-color: #ebebeb;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        background-color: #007aff;
-        border-radius: 50%;
-        svg {
-          font-size: 2vw;
-          color: #fff;
+        border-radius: 1vw;
+        padding: 1vw;
+        input {
+          background-color: transparent;
+          outline: none;
+          border: none;
+          width: 100%;
+          height: 100%;
+          padding-left: 1vw;
+        }
+        /*         ::placeholder {
+        } */
+        .send {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #007aff;
+          border-radius: 50%;
+          svg {
+            font-size: 2vw;
+            color: #fff;
+          }
         }
       }
     }
