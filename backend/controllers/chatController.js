@@ -24,7 +24,7 @@ class chatController {
 
       // If the invited user is not found, return an error response
       if (!secondUser) {
-        return res.status(404).json({
+        return res.status(202).json({
           message: "User not found, ask them to register on the app first",
           code: "404"
         });
@@ -209,7 +209,7 @@ class chatController {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const chat = user.chats.find(chat => chat._id.toString() === chatId);
+      const chat = user.chats.find(chat => chat.chatId === chatId);
 
       if (!chat) {
         return res.status(404).json({ message: "Chat not found" });

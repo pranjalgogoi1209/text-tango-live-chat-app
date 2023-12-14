@@ -2,15 +2,32 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatSidebar from "./ChatSidebar";
-import { getChatsLink } from "../../../apiconfig";
+import { getChatsLink, backendhost } from "../../../apiconfig";
 import ChatWelcome from "./ChatWelcome";
 import AddUser from "./AddUser";
+import { io } from "socket.io-client";
+
 
 export default function ChatPage({ userId }) {
   const [isAddUser, setIsAddUser] = useState(false);
   const [newUser, setNewUser] = useState(); // data coming from AddUser component
   const [singleUser, setSingleUser] = useState();
   const [allChat, setAllChat] = useState();
+
+  // SOCKET FUNCTIONS - INITIATION
+  let socket;
+  // useEffect(() => {
+    // console.log("bhagg")
+    socket = io(backendhost);
+    socket.emit("setup", userId);
+    socket.on("connection", () => {
+      console.log("socket in frontend");
+    });
+    socket.on("connected", user =>{
+      console.log("socket now =>", user);
+    })
+    
+  // }, []);
 
   // GET REQUEST FROM GET CHATS LINK API
   useEffect(() => {

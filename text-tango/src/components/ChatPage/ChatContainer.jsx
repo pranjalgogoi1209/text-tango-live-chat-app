@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Stack, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { io } from "socket.io-client";
 
 import {
   deleteChatLink,
@@ -95,6 +96,10 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     console.log("user id => ", userId);
     console.log("chat id => ", singleUser._id);
   };
+
+
+  // socket.io
+
 
   return (
     <Wrapper>
