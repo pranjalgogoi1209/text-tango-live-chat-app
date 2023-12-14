@@ -1,10 +1,13 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatSidebar from "./ChatSidebar";
-import { getChatsLink } from "../../../apiconfig";
+import { getChatsLink, backendhost } from "../../../apiconfig";
 import ChatWelcome from "./ChatWelcome";
 import AddUser from "./AddUser";
+import { io } from "socket.io-client";
 
 export default function ChatPage({ userId }) {
   const [isAddUser, setIsAddUser] = useState(false);
@@ -13,8 +16,9 @@ export default function ChatPage({ userId }) {
   const [allChat, setAllChat] = useState();
 
   // GET REQUEST FROM GET CHATS LINK API
+
   useEffect(() => {
-    const getAllChats = userId => {
+    const getAllChats = (userId) => {
       const options = {
         method: "GET",
         headers: {
@@ -22,18 +26,33 @@ export default function ChatPage({ userId }) {
         },
       };
       fetch(`${getChatsLink}/${userId}`, options)
-        .then(response => response.json())
-        .then(data => {
-          console.log("ChatPage: all chats => ", data);
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("ChatPage: all chats => ", data.user);
           setAllChat(data);
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
     };
 
     // userId is coming from Login component
     console.log(userId);
     userId && getAllChats(userId);
   }, [userId, newUser]);
+
+  let socket;
+  // useEffect(() => {
+  // console.log("bhagg")
+  socket = io(backendhost);
+  if (allChat) {
+    socket.emit("setup", userId);
+  }
+  socket.on("connection", () => {
+    console.log("socket in frontend");
+  });
+
+  socket.on("connected", (payload) => {
+    console.log("socket now =>", payload);
+  });
 
   return (
     <Wrapper>
