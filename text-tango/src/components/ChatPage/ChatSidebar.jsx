@@ -14,6 +14,7 @@ export default function ChatSidebar({
   userId,
   allChat,
 }) {
+  const [isUserProfile, setIsUserProfile] = useState(false);
   // new created user
   // console.log("new created user", newUser.allChats[0]);
   const deleteChat = (userId, chatId) => {
@@ -35,9 +36,14 @@ export default function ChatSidebar({
   };
   // deleteChat("6575c9f5ad262e8fa5d027d8", "6575cf874f8e9ab1e6cda5f9");
 
+  const handleClickUserProfile = e => {
+    e.stopPropagation();
+    setIsUserProfile(true);
+  };
+
   return (
     <Wrapper>
-      <div className="ChatSidebar">
+      <div className="ChatSidebar" onClick={() => setIsUserProfile(false)}>
         {/* header */}
         <header>
           <div>
@@ -47,11 +53,24 @@ export default function ChatSidebar({
             <IconButton onClick={() => setIsAddUser(true)}>
               <AddCircleIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={e => handleClickUserProfile(e)}>
               <MoreVertIcon />
             </IconButton>
           </div>
         </header>
+
+        {/* show user profile section */}
+        <section
+          className={
+            isUserProfile ? "user-profile show-user-profile " : "user-profile "
+          }
+        >
+          {allChat && (
+            <h1>{allChat.user.firstName + " " + allChat.user.lastName}</h1>
+          )}
+          {allChat && <h2>{allChat.user.number}</h2>}
+        </section>
+
         {/* search-bar */}
         <div className="search-bar">
           <IconButton>
@@ -61,7 +80,7 @@ export default function ChatSidebar({
         </div>
         {/* users */}
         <div className="users">
-          {/* FOR ALL CHATS  */}{" "}
+          {/* FOR ALL CHATS  */}
           {allChat &&
             allChat.user.chats.map(user => (
               <User
@@ -80,8 +99,9 @@ export default function ChatSidebar({
 
 const Wrapper = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   .ChatSidebar {
+    width: 100vw;
     display: flex;
     flex-direction: column;
     gap: 2vw;
@@ -94,6 +114,9 @@ const Wrapper = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      h1 {
+        font-size: 3vw;
+      }
       .header-icons {
         display: flex;
         svg {
@@ -101,6 +124,32 @@ const Wrapper = styled.div`
           font-size: 2.3vw;
         }
       }
+    }
+    .user-profile {
+      display: flex;
+      flex-direction: column;
+      gap: 1vw;
+      color: #007aff;
+      position: absolute;
+      top: 6vw;
+      left: 11.2vw;
+      background-color: #fff;
+      height: 20vw;
+      width: 20vw;
+      border-radius: 1vw;
+      /* transition: all ease 0.5s; */
+      transform: translateY(-140%);
+      padding: 2vw;
+      h1 {
+        font-size: 1.8vw;
+      }
+      h2 {
+        font-size: 1.2vw;
+      }
+    }
+
+    .show-user-profile {
+      transform: translateY(0);
     }
 
     .search-bar {
@@ -119,13 +168,15 @@ const Wrapper = styled.div`
         color: #fff;
         outline: none;
         border: none;
+        width: 100%;
+        height: 100%;
       }
       ::placeholder {
         color: #fff;
       }
     }
-
     .users {
+      height: 100vh;
       padding-right: 2vw;
       overflow: scroll;
       overflow-x: hidden;

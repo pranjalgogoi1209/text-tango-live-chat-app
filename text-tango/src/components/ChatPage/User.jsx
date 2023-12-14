@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 export default function User({ user, setIsAddUser, setSingleUser }) {
   const handleClick = () => {
-    console.log("clicked on user");
     setIsAddUser(null);
     setSingleUser(user);
   };
@@ -23,13 +22,15 @@ export default function User({ user, setIsAddUser, setSingleUser }) {
                 <strong>{user.name}</strong>
               </p>
             )}
-            <p>
-              <small>Hello, Good Morning...!</small>
-            </p>
+            {user && (
+              <p>
+                <small>{user.lastMessage}</small>
+              </p>
+            )}
           </div>
         </div>
 
-        <div className="msg-count">1</div>
+        {user.lastMessage && <div className="msg-count">1</div>}
       </div>
     </Wrapper>
   );

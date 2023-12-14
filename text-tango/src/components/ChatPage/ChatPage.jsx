@@ -41,7 +41,7 @@ export default function ChatPage({ userId }) {
       fetch(`${getChatsLink}/${userId}`, options)
         .then(response => response.json())
         .then(data => {
-          console.log("ChatPage", data);
+          console.log("ChatPage: all chats => ", data);
           setAllChat(data);
         })
         .catch(error => console.log(error));
@@ -51,8 +51,6 @@ export default function ChatPage({ userId }) {
     console.log(userId);
     userId && getAllChats(userId);
   }, [userId, newUser]);
-
-  console.log("allChat", allChat);
 
   return (
     <Wrapper>
@@ -93,13 +91,14 @@ const Wrapper = styled.div`
     height: 100vh;
     width: 100vw;
     display: flex;
+    justify-content: space-between;
     .ChatSidebar {
       width: 35%;
       border-radius: 0 1vw 1vw 0;
       /* border: 2px solid black; */
     }
     .ChatContainer {
-      width: 100%;
+      flex: 1;
       border-radius: 1vw 0 0 1vw;
       /* border: 2px solid black; */
     }
