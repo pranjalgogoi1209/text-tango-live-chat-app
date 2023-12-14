@@ -1,6 +1,6 @@
 // apiEndpoints.js
 
-const backendhost = "http://localhost:3001";
+export const backendhost = "http://localhost:3001";
 
 export const signupLink = `${backendhost}/user/signup`;
 export const signinLink = `${backendhost}/user/signin`;
