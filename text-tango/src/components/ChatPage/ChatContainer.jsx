@@ -12,35 +12,25 @@ import {
   newChatMessageLink,
   updateChatLink,
 } from "../../../apiconfig";
-import { Chat } from "@mui/icons-material";
+// import { Chat } from "@mui/icons-material";
 
 export default function ChatContainer({ newUser, singleUser, userId }) {
+  console.log("singleUser => ", singleUser.messages);
   console.log("singleUser => ", singleUser);
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isSend, setIsSend] = useState(1);
   const [msg, setMsg] = useState();
-  const [allMsgArray, setAllMsgArray] = useState(
-    singleUser.messages.map(msgObj => msgObj.message)
-  );
-  console.log("allMsgArray => ", allMsgArray);
 
-  // DELETE REQUEST TO DELETE CHAT LINK API
-  const deleteChat = (userId, chatId) => {
-    const data = { userId, chatId };
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-    fetch(deleteChatLink, options)
-      .then(response => response.json())
-      .then(data => {
-        console.log("ChatContainer, Delete Chat", data);
-      })
-      .catch(error => console.log(error));
-  };
+  // for empty array
+  const [allMsgArray, setAllMsgArray] = useState(singleUser.messages);
+
+  // for array of objects
+  const [allMsgDataArray, setAllMsgDataArray] = useState(singleUser.messages);
+
+  // to push msg in above array of objects
+  const [allMsgObjArray, setAllMsgObjArray] = useState(
+    allMsgDataArray.map(msgObj => msgObj.message)
+  );
 
   const updateChat = (newName, userId, chatId) => {
     const data = { newName, userId, chatId };
@@ -78,13 +68,6 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       .catch(error => console.log(error));
   };
 
-  const handleDelete = e => {
-    console.log("Clicked on delete Chat");
-    deleteChat(userId, singleUser._id);
-    console.log("user id => ", userId);
-    console.log("chat id => ", singleUser._id);
-  };
-
   // # POST REQUEST TO SEND MESSAGE
   const saveNewChatMessage = (userId, secondUserId, chatId, send, message) => {
     const data = { userId, secondUserId, chatId, send, message };
@@ -99,13 +82,23 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        allMsgArray.push(msg);
-        console.log("updated allMsgArray => ", allMsgArray);
+        if (msg) {
+          // if singleUser.messages is empty array
+          if (singleUser.messages.length === 0) {
+            allMsgArray.push(msg);
+            console.log("updated allMsgArray => ", allMsgArray);
+          }
+          // if singleUser.messages is array of objects
+          else {
+            allMsgObjArray.push(msg);
+            console.log("updated allMsgObjArray => ", allMsgObjArray);
+          }
+        }
       })
       .catch(error => console.log(error));
   };
 
-  // SEND MESSAGE
+  // # HANDLE SEND MESSAGE
   const handleSendMessage = e => {
     e.preventDefault();
     saveNewChatMessage(
@@ -118,6 +111,30 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     e.target.msgbox.value = "";
   };
 
+  /*  // # DELETE REQUEST TO DELETE SINGLE CHAT
+  const deleteChat = (userId, chatId) => {
+    const data = { userId, chatId };
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(deleteChatLink, options)
+      .then(response => response.json())
+      .then(data => {
+        console.log("ChatContainer, Delete Chat", data);
+      })
+      .catch(error => console.log(error));
+  };
+
+  // # HANDLE DELETE SINGLE CHAT
+  const handleDelete = e => {
+    console.log("Clicked on delete Chat");
+    deleteChat(userId, singleUser._id);
+  }; */
+  console.log("all msg array => ", allMsgArray);
   return (
     <Wrapper>
       <div className="ChatContainer">
@@ -136,16 +153,17 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
           </div>
         </header>
 
-        {/* delete chat section */}
+        {/* popup section*/}
         <section className={isProfileShow ? "profile show-profile" : "profile"}>
           <h1>
-            {singleUser.name.split(" ")[0][0].toUpperCase() +
+            {/*    {singleUser.name.split(" ")[0][0].toUpperCase() +
               singleUser.name.split(" ")[0].slice(1).toLowerCase() +
               " " +
               singleUser.name.split(" ")[1][0].toUpperCase() +
-              singleUser.name.split(" ")[1].slice(1).toLowerCase()}
+              singleUser.name.split(" ")[1].slice(1).toLowerCase()} */}
+            {singleUser.name}
           </h1>
-          <Stack onClick={e => handleDelete(e)}>
+          <Stack>
             <Button
               type="submit"
               variant="contained"
@@ -171,14 +189,20 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
           className={isSend ? "msg-right" : null}
           onClick={() => setIsProfileShow(false)}
         >
-          {allMsgArray &&
-            allMsgArray
-              .reverse()
-              .map((msg, i) => (
-                <MessageBox isSend={isSend} msg={msg} key={i} />
-              ))}
+          {/* for empty array in singleUser.messages */}
+          {singleUser.messages.length === 0 &&
+            allMsgArray.map((msg, index) => (
+              <MessageBox msg={msg} key={index} />
+            ))}
+
+          {/* for array of objects in singleUser.messages */}
+          {allMsgObjArray &&
+            allMsgObjArray.map((msg, index) => (
+              <MessageBox msg={msg} key={index} />
+            ))}
         </main>
 
+        {/* footer */}
         <footer>
           <form onSubmit={e => handleSendMessage(e)}>
             <input
