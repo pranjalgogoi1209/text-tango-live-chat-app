@@ -18,19 +18,18 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
   console.log("singleUser => ", singleUser.messages);
   console.log("singleUser => ", singleUser);
   const [isProfileShow, setIsProfileShow] = useState(false);
-  const [isSend, setIsSend] = useState(1);
+  const [isSend, setIsSend] = useState(true);
   const [msg, setMsg] = useState();
 
-  // for empty array
+  /*  const array = singleUser.messages;
+  const newArray = array.reverse().map(i => {
+    return i;
+  });
+  console.log(newArray); */
+
+  // for empty array & array of object
   const [allMsgArray, setAllMsgArray] = useState(singleUser.messages);
-
-  // for array of objects
-  const [allMsgDataArray, setAllMsgDataArray] = useState(singleUser.messages);
-
-  // to push msg in above array of objects
-  const [allMsgObjArray, setAllMsgObjArray] = useState(
-    allMsgDataArray.map(msgObj => msgObj.message)
-  );
+  // console.log(allMsgArray);
 
   /*   const updateChat = (newName, userId, chatId) => {
     const data = { newName, userId, chatId };
@@ -82,18 +81,7 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        if (msg) {
-          // if singleUser.messages is empty array
-          if (singleUser.messages.length === 0) {
-            allMsgArray.push(msg);
-            console.log("updated allMsgArray => ", allMsgArray);
-          }
-          // if singleUser.messages is array of objects
-          else {
-            allMsgObjArray.push(msg);
-            console.log("updated allMsgObjArray => ", allMsgObjArray);
-          }
-        }
+        allMsgArray.unshift({ message: msg, send: false });
       })
       .catch(error => console.log(error));
   };
@@ -134,7 +122,7 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
     console.log("Clicked on delete Chat");
     deleteChat(userId, singleUser._id);
   }; */
-  console.log("all msg array => ", allMsgArray);
+
   return (
     <Wrapper>
       <div className="ChatContainer">
@@ -186,20 +174,12 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
 
         {/* main */}
         <main
-          className={isSend ? "msg-right" : null}
+          className={isSend ? "msg-right" : "msg-left"}
           onClick={() => setIsProfileShow(false)}
         >
-          {/* for empty array in singleUser.messages */}
-          {singleUser.messages.length === 0 &&
-            allMsgArray.map((msg, index) => (
-              <MessageBox msg={msg} isSend={isSend} key={index} />
-            ))}
-
-          {/* for array of objects in singleUser.messages */}
-          {allMsgObjArray &&
-            allMsgObjArray.map((msg, index) => (
-              <MessageBox msg={msg} isSend={isSend} key={index} />
-            ))}
+          {allMsgArray.map(msg => (
+            <MessageBox msg={msg} setIsSend={setIsSend} key={msg._id} />
+          ))}
         </main>
 
         {/* footer */}
@@ -224,7 +204,9 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
 }
 
 const Wrapper = styled.div`
+  height: 100%;
   .ChatContainer {
+    height: 100%;
     header {
       height: 15vh;
       color: #1a1a1a;
@@ -286,17 +268,19 @@ const Wrapper = styled.div`
       transform: translateY(0);
     }
     main {
-      height: 74vh;
-      padding: 2vw;
+      /* height: 74vh; */
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       justify-content: flex-end;
+      padding: 2vw;
       gap: 1vw;
-      overflow: scroll;
-      overflow-x: hidden;
+      overflow-y: scroll;
     }
     .msg-right {
       align-items: flex-end;
+    }
+    .msg-left {
+      align-items: flex-start;
     }
 
     footer {

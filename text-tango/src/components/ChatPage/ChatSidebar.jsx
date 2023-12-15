@@ -102,11 +102,11 @@ const Wrapper = styled.div`
   height: 100%;
   .ChatSidebar {
     width: 100vw;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 2vw;
     padding: 2vw 1vw 0 2vw;
-    height: 100%;
     background-color: #007aff;
     color: #fff;
     header {
@@ -151,7 +151,6 @@ const Wrapper = styled.div`
     .show-user-profile {
       transform: translateY(0);
     }
-
     .search-bar {
       display: flex;
       gap: 1vw;

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function MessageBox({ isSend, msg }) {
+export default function MessageBox({ setIsSend, msg }) {
+  msg && setIsSend(msg.send);
   return (
     <Wrapper>
-      <div className={isSend ? "MessageBoxRight" : "MessageBoxLeft"}>
-        {/* {msgData && <div className="msg">{msgData.message}</div>} */}
-        {msg && <div className="msg">{msg}</div>}
+      <div className={msg.send ? "MessageBoxLeft" : "MessageBoxRight"}>
+        {msg && <div className="msg">{msg.message}</div>}
       </div>
     </Wrapper>
   );
